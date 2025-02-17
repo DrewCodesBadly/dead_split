@@ -1,0 +1,56 @@
+extends Control
+
+@export var timer_elements: VBoxContainer
+@export var timer_label: Label
+
+@onready var settings_window_scene := preload("res://Settings/settings.tscn")
+
+var old_timer_phase: int
+var settings_open := false
+
+signal timer_phase_changed
+signal timer_running
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion && Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		get_window().position += Vector2i(event.relative.x * 1.5, event.relative.y * 1.5)
+
+func _process(_delta: float) -> void:
+	# Mimic livesplit's floating window system
+	if Input.is_action_just_pressed("move_window") and DisplayServer.window_is_focused(0):
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	elif Input.is_action_just_released("move_window"):
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
+	# Open settings when settings key (default right mouse) is pressed
+	if Input.is_action_just_pressed("open_settings") and !settings_open:
+		var settings := settings_window_scene.instantiate()
+		add_child(settings)
+		settings.timer_window = self
+		settings_open = true
+	
+	# Send appropriate signals based on timer phase
+	var new_phase := MainTimer.timer_phase
+	if new_phase != old_timer_phase:
+		timer_phase_changed.emit(new_phase as TimerSettings.TimerPhase)
+	if new_phase == 1:
+		timer_running.emit()
+	
+	old_timer_phase = new_phase
+	
+	timer_label.text = TimerSettings.round_off(MainTimer.current_time if TimerSettings.rta else MainTimer.current_game_time)
+
+func _ready() -> void:
+	var title = load("res://TimerElements/Title/title.tscn")
+	add_element(title.instantiate())
+	
+	var splits = load("res://TimerElements/Splits/splits.tscn")
+	add_element(splits.instantiate())
+	
+	MainTimer.run_changed.emit()
+
+func add_element(element: TimerElement) -> void:
+	timer_elements.add_child(element)
+	MainTimer.run_changed.connect(element.run_updated)
+	timer_running.connect(element.timer_process)
+	timer_phase_changed.connect(element.timer_phase_change)

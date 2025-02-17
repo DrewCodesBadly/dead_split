@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=3 uid="uid://1arpdlm8c40m"]
+
+[ext_resource type="Script" uid="uid://bdhhc8dwk6trb" path="res://TimerElements/Splits/split.gd" id="1_d7lqx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d7lqx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_amq76"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0k05p"]
+bg_color = Color(0.20871, 0.20871, 0.20871, 1)
+
+[node name="Split" type="PanelContainer" node_paths=PackedStringArray("name_label", "comparisons")]
+clip_contents = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_d7lqx")
+script = ExtResource("1_d7lqx")
+name_label = NodePath("SplitContainer/SplitName")
+comparisons = NodePath("SplitContainer/Comparisons")
+inactive_box = SubResource("StyleBoxEmpty_amq76")
+active_box = SubResource("StyleBoxFlat_0k05p")
+
+[node name="SplitContainer" type="HSplitContainer" parent="."]
+layout_direction = 2
+layout_mode = 2
+mouse_filter = 2
+dragging_enabled = false
+
+[node name="SplitName" type="Label" parent="SplitContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text_overrun_behavior = 3
+
+[node name="Comparisons" type="HBoxContainer" parent="SplitContainer"]
+layout_mode = 2
+alignment = 2

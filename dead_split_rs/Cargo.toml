@@ -1,0 +1,12 @@
+[package]
+name = "dead_split_rs"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+global-hotkey = "0.6.3"
+livesplit-core = "0.13.0"
+godot = "0.2.3"

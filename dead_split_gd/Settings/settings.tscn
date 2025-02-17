@@ -1,0 +1,433 @@
+[gd_scene load_steps=12 format=3 uid="uid://cisd3sjrsl80g"]
+
+[ext_resource type="Script" uid="uid://dphvoc2b12tsf" path="res://Settings/settings.gd" id="1_cdu2u"]
+[ext_resource type="Theme" uid="uid://c5l3e3euemg0u" path="res://Settings/settings_theme.tres" id="2_qeycx"]
+[ext_resource type="Script" uid="uid://cru7iogkv266h" path="res://Settings/quick_load.gd" id="3_cfss5"]
+[ext_resource type="Script" uid="uid://cu1bi3ks2s2pb" path="res://Settings/change_working_dir.gd" id="3_d3rbk"]
+[ext_resource type="LabelSettings" uid="uid://bqye7e4b32ngr" path="res://Settings/settings_warning_label_settings.tres" id="4_3pnvy"]
+[ext_resource type="Script" uid="uid://btim2tweu56gq" path="res://Settings/change_current_file.gd" id="5_v5vgm"]
+[ext_resource type="Script" uid="uid://ca7b66tmv6f0x" path="res://Settings/run_edit.gd" id="7_gppkp"]
+[ext_resource type="Script" uid="uid://b2xy0nqlexsc1" path="res://Settings/hotkeys.gd" id="7_jq5xg"]
+[ext_resource type="PackedScene" uid="uid://f46c6gpr2wi" path="res://Settings/control_rebinder.tscn" id="8_eh28s"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cfss5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qeycx"]
+
+[node name="Settings" type="Window" node_paths=PackedStringArray("submenus", "menus_container", "menu_toggle")]
+title = "DeadSplit Settings"
+initial_position = 4
+size = Vector2i(1000, 1000)
+script = ExtResource("1_cdu2u")
+submenus = NodePath("Submenus")
+menus_container = NodePath("MenuToggle/MenusContainer")
+menu_toggle = NodePath("MenuToggle")
+quit_index = 5
+
+[node name="MenuToggle" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_qeycx")
+
+[node name="MenuBar" type="HBoxContainer" parent="MenuToggle"]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="MenuToggle/MenuBar"]
+layout_mode = 2
+text = "Back"
+
+[node name="VSeparator" type="VSeparator" parent="MenuToggle/MenuBar"]
+visible = false
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="MenuToggle"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="MenusContainer" type="Control" parent="MenuToggle"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="QuickLoad" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("no_dir_label", "file_list", "window")]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_cfss5")
+no_dir_label = NodePath("VBoxContainer/NoDirectoryLabel")
+file_list = NodePath("VBoxContainer/FileList")
+window = NodePath("../../..")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuToggle/MenusContainer/QuickLoad"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="NoDirectoryLabel" type="Label" parent="MenuToggle/MenusContainer/QuickLoad/VBoxContainer"]
+custom_minimum_size = Vector2(750, 0)
+layout_mode = 2
+text = "No DeadSplit directory set! Please set one in the Files options first."
+autowrap_mode = 2
+
+[node name="FileList" type="ItemList" parent="MenuToggle/MenusContainer/QuickLoad/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_cfss5")
+
+[node name="Files" type="ScrollContainer" parent="MenuToggle/MenusContainer"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuToggle/MenusContainer/Files"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="WorkingDir" type="HSplitContainer" parent="MenuToggle/MenusContainer/Files/VBoxContainer"]
+layout_mode = 2
+split_offset = 700
+
+[node name="DirLabel" type="Label" parent="MenuToggle/MenusContainer/Files/VBoxContainer/WorkingDir"]
+layout_mode = 2
+text = "DeadSplit Directory: "
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="ChangeWorkingDir" type="Button" parent="MenuToggle/MenusContainer/Files/VBoxContainer/WorkingDir" node_paths=PackedStringArray("dir_chooser", "dir_label", "no_dir_warning", "dir_changed_warning")]
+layout_mode = 2
+text = "Change"
+script = ExtResource("3_d3rbk")
+dir_chooser = NodePath("../../../DirectoryChooser")
+dir_label = NodePath("../DirLabel")
+no_dir_warning = NodePath("../../NoDirWarning")
+dir_changed_warning = NodePath("../../DirChangedWarning")
+
+[node name="NoDirWarning" type="Label" parent="MenuToggle/MenusContainer/Files/VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Warning: No directory set!"
+label_settings = ExtResource("4_3pnvy")
+
+[node name="DirChangedWarning" type="Label" parent="MenuToggle/MenusContainer/Files/VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Warning: You may need to manually copy over old .lss files."
+label_settings = ExtResource("4_3pnvy")
+
+[node name="ActiveFile" type="HSplitContainer" parent="MenuToggle/MenusContainer/Files/VBoxContainer"]
+layout_mode = 2
+split_offset = 700
+
+[node name="CurrentFileLabel" type="Label" parent="MenuToggle/MenusContainer/Files/VBoxContainer/ActiveFile"]
+layout_mode = 2
+text = "Current Split File:"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="ChangeCurrentFile" type="Button" parent="MenuToggle/MenusContainer/Files/VBoxContainer/ActiveFile" node_paths=PackedStringArray("file_chooser", "file_label", "run_saved_label", "save_failed_label", "window")]
+layout_mode = 2
+text = "Open"
+script = ExtResource("5_v5vgm")
+file_chooser = NodePath("../../../RunFileChooser")
+file_label = NodePath("../CurrentFileLabel")
+run_saved_label = NodePath("../../HBoxContainer/RunSaved")
+save_failed_label = NodePath("../../HBoxContainer/ErrorSaving")
+window = NodePath("../../../../../..")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuToggle/MenusContainer/Files/VBoxContainer"]
+layout_mode = 2
+
+[node name="SaveRunToFile" type="Button" parent="MenuToggle/MenusContainer/Files/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Save Current Run To File"
+
+[node name="RunSaved" type="Label" parent="MenuToggle/MenusContainer/Files/VBoxContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Run Saved!"
+
+[node name="ErrorSaving" type="Label" parent="MenuToggle/MenusContainer/Files/VBoxContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Error saving run - check your current run path is valid"
+label_settings = ExtResource("4_3pnvy")
+vertical_alignment = 1
+
+[node name="DirectoryChooser" type="FileDialog" parent="MenuToggle/MenusContainer/Files"]
+title = "Open a Directory"
+ok_button_text = "Select Current Folder"
+file_mode = 2
+access = 1
+use_native_dialog = true
+
+[node name="RunFileChooser" type="FileDialog" parent="MenuToggle/MenusContainer/Files"]
+access = 1
+filters = PackedStringArray("*.lss")
+use_native_dialog = true
+
+[node name="RunEdit" type="VBoxContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("segment_editor", "comparison_remove", "comp_chooser", "igt_switch", "game_name_edit", "category_name_edit", "attempt_count_edit", "offset_edit", "add_comp_text", "segment_name_edit")]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("7_gppkp")
+segment_editor = NodePath("ScrollContainer/VBoxContainer/SegmentEditor")
+comparison_remove = NodePath("ScrollContainer/VBoxContainer/GridContainer/ComparisonRemove")
+comp_chooser = NodePath("ScrollContainer/VBoxContainer/GridContainer/CompChooser")
+igt_switch = NodePath("ScrollContainer/VBoxContainer/GridContainer/IGTSwitch")
+game_name_edit = NodePath("ScrollContainer/VBoxContainer/GridContainer/GameNameEdit")
+category_name_edit = NodePath("ScrollContainer/VBoxContainer/GridContainer/CategoryNameEdit")
+attempt_count_edit = NodePath("ScrollContainer/VBoxContainer/GridContainer/AttemptCount")
+offset_edit = NodePath("ScrollContainer/VBoxContainer/GridContainer/Offset")
+add_comp_text = NodePath("ScrollContainer/VBoxContainer/GridContainer/ComparisonAdd")
+segment_name_edit = NodePath("ScrollContainer/VBoxContainer/SplitContainer/SegName")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MenuToggle/MenusContainer/RunEdit"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Note: Press enter to confirm text changes!"
+
+[node name="GridContainer" type="GridContainer" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="Label" type="Label" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Game Name"
+
+[node name="GameNameEdit" type="LineEdit" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "..."
+
+[node name="Label2" type="Label" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Category Name"
+
+[node name="CategoryNameEdit" type="LineEdit" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+placeholder_text = "..."
+
+[node name="Label3" type="Label" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Attempt Count"
+
+[node name="AttemptCount" type="LineEdit" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+placeholder_text = "..."
+
+[node name="Label4" type="Label" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Start Offset"
+
+[node name="Offset" type="LineEdit" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+placeholder_text = "..."
+
+[node name="ComparisonAdd" type="LineEdit" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+placeholder_text = "comp name..."
+
+[node name="AddCompButton" type="Button" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Add custom comparison"
+
+[node name="ComparisonRemove" type="OptionButton" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="RemoveCompButton" type="Button" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Remove this comparison"
+
+[node name="Label5" type="Label" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Editing Comparison:"
+
+[node name="CompChooser" type="OptionButton" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label6" type="Label" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Editing IGT"
+
+[node name="IGTSwitch" type="CheckButton" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="GridInfo" type="Label" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Name/Comparison Time/Best Time"
+
+[node name="SegmentEditor" type="VBoxContainer" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SplitContainer" type="SplitContainer" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SegName" type="LineEdit" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/SplitContainer"]
+layout_mode = 2
+placeholder_text = "Name..."
+
+[node name="AddSeg" type="Button" parent="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/SplitContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Add New Segment"
+
+[node name="SaveButton" type="Button" parent="MenuToggle/MenusContainer/RunEdit"]
+layout_mode = 2
+text = "Save run changes"
+
+[node name="Layout" type="ScrollContainer" parent="MenuToggle/MenusContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Hotkeys" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("window", "hotkeys_container")]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("7_jq5xg")
+window = NodePath("../../..")
+hotkeys_container = NodePath("VBoxContainer")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuToggle/MenusContainer/Hotkeys"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="StartSplit" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer" instance=ExtResource("8_eh28s")]
+layout_mode = 2
+
+[node name="Label" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/StartSplit" index="0"]
+text = "Start/Split"
+
+[node name="Reset" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer" instance=ExtResource("8_eh28s")]
+layout_mode = 2
+
+[node name="Label" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/Reset" index="0"]
+text = "Reset"
+
+[node name="SkipSplit" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer" instance=ExtResource("8_eh28s")]
+layout_mode = 2
+
+[node name="Label" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/SkipSplit" index="0"]
+text = "Skip Split"
+
+[node name="UndoSplit" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer" instance=ExtResource("8_eh28s")]
+layout_mode = 2
+
+[node name="Label" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/UndoSplit" index="0"]
+text = "Undo Split"
+
+[node name="Pause" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer" instance=ExtResource("8_eh28s")]
+layout_mode = 2
+
+[node name="Label" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/Pause" index="0"]
+text = "Pause"
+
+[node name="Unpause" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer" instance=ExtResource("8_eh28s")]
+layout_mode = 2
+
+[node name="Label" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/Unpause" index="0"]
+text = "Unpause"
+
+[node name="UndoPauses" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer" instance=ExtResource("8_eh28s")]
+layout_mode = 2
+
+[node name="Label" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/UndoPauses" index="0"]
+text = "Undo All Pauses"
+
+[node name="TogglePause" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer" instance=ExtResource("8_eh28s")]
+layout_mode = 2
+
+[node name="Label" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/TogglePause" index="0"]
+text = "Toggle Paused"
+
+[node name="ToggleTimingMethod" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer" instance=ExtResource("8_eh28s")]
+layout_mode = 2
+
+[node name="Label" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/ToggleTimingMethod" index="0"]
+text = "Toggle Timing Method"
+
+[node name="Submenus" type="ItemList" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_qeycx")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_qeycx")
+item_count = 6
+item_0/text = "Quick Load a Run"
+item_1/text = "Files"
+item_2/text = "Edit Splits"
+item_3/text = "Edit Layout"
+item_4/text = "Edit Hotkeys"
+item_5/text = "Quit DeadSplit"
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
+[connection signal="pressed" from="MenuToggle/MenuBar/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="visibility_changed" from="MenuToggle/MenusContainer/QuickLoad" to="MenuToggle/MenusContainer/QuickLoad" method="_on_visibility_changed"]
+[connection signal="item_clicked" from="MenuToggle/MenusContainer/QuickLoad/VBoxContainer/FileList" to="MenuToggle/MenusContainer/QuickLoad" method="_on_item_list_item_clicked"]
+[connection signal="pressed" from="MenuToggle/MenusContainer/Files/VBoxContainer/WorkingDir/ChangeWorkingDir" to="MenuToggle/MenusContainer/Files/VBoxContainer/WorkingDir/ChangeWorkingDir" method="_on_pressed"]
+[connection signal="pressed" from="MenuToggle/MenusContainer/Files/VBoxContainer/ActiveFile/ChangeCurrentFile" to="MenuToggle/MenusContainer/Files/VBoxContainer/ActiveFile/ChangeCurrentFile" method="_on_pressed"]
+[connection signal="pressed" from="MenuToggle/MenusContainer/Files/VBoxContainer/HBoxContainer/SaveRunToFile" to="MenuToggle/MenusContainer/Files/VBoxContainer/ActiveFile/ChangeCurrentFile" method="_on_save_run_to_file_pressed"]
+[connection signal="canceled" from="MenuToggle/MenusContainer/Files/DirectoryChooser" to="MenuToggle/MenusContainer/Files/VBoxContainer/WorkingDir/ChangeWorkingDir" method="_on_directory_chooser_canceled"]
+[connection signal="close_requested" from="MenuToggle/MenusContainer/Files/DirectoryChooser" to="MenuToggle/MenusContainer/Files/VBoxContainer/WorkingDir/ChangeWorkingDir" method="_on_directory_chooser_close_requested"]
+[connection signal="dir_selected" from="MenuToggle/MenusContainer/Files/DirectoryChooser" to="MenuToggle/MenusContainer/Files/VBoxContainer/WorkingDir/ChangeWorkingDir" method="_on_directory_chooser_dir_selected"]
+[connection signal="canceled" from="MenuToggle/MenusContainer/Files/RunFileChooser" to="MenuToggle/MenusContainer/Files/VBoxContainer/ActiveFile/ChangeCurrentFile" method="_on_run_file_chooser_canceled"]
+[connection signal="file_selected" from="MenuToggle/MenusContainer/Files/RunFileChooser" to="MenuToggle/MenusContainer/Files/VBoxContainer/ActiveFile/ChangeCurrentFile" method="_on_run_file_chooser_file_selected"]
+[connection signal="visibility_changed" from="MenuToggle/MenusContainer/RunEdit" to="MenuToggle/MenusContainer/RunEdit" method="_on_visibility_changed"]
+[connection signal="text_submitted" from="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer/GameNameEdit" to="MenuToggle/MenusContainer/RunEdit" method="_on_game_name_edit_text_changed"]
+[connection signal="text_submitted" from="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer/CategoryNameEdit" to="MenuToggle/MenusContainer/RunEdit" method="_on_category_name_edit_text_changed"]
+[connection signal="text_submitted" from="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer/AttemptCount" to="MenuToggle/MenusContainer/RunEdit" method="_on_attempt_count_text_changed"]
+[connection signal="text_submitted" from="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer/Offset" to="MenuToggle/MenusContainer/RunEdit" method="_on_offset_text_changed"]
+[connection signal="pressed" from="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer/AddCompButton" to="MenuToggle/MenusContainer/RunEdit" method="_on_add_comp_button_pressed"]
+[connection signal="pressed" from="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer/RemoveCompButton" to="MenuToggle/MenusContainer/RunEdit" method="_on_remove_comp_button_pressed"]
+[connection signal="item_selected" from="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer/CompChooser" to="MenuToggle/MenusContainer/RunEdit" method="_on_comp_chooser_item_selected"]
+[connection signal="toggled" from="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer/IGTSwitch" to="MenuToggle/MenusContainer/RunEdit" method="_on_igt_switch_toggled"]
+[connection signal="pressed" from="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/SplitContainer/AddSeg" to="MenuToggle/MenusContainer/RunEdit" method="_on_add_seg_pressed"]
+[connection signal="pressed" from="MenuToggle/MenusContainer/RunEdit/SaveButton" to="MenuToggle/MenusContainer/RunEdit" method="_on_save_button_pressed"]
+[connection signal="visibility_changed" from="MenuToggle/MenusContainer/Hotkeys" to="MenuToggle/MenusContainer/Hotkeys" method="_on_visibility_changed"]
+[connection signal="item_clicked" from="Submenus" to="." method="_on_submenus_item_clicked"]
+
+[editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/StartSplit"]
+[editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/Reset"]
+[editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/SkipSplit"]
+[editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/UndoSplit"]
+[editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/Pause"]
+[editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/Unpause"]
+[editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/UndoPauses"]
+[editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/TogglePause"]
+[editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/ToggleTimingMethod"]
