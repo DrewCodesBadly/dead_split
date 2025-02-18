@@ -1,73 +1,64 @@
 extends PanelContainer
 
+class_name Split
+
 @export var name_label: Label
-@export var comparisons: HBoxContainer
-@export var inactive_box: StyleBox
-@export var active_box: StyleBox
+@export var comp_label: Label
+@export var time_label: Label
+var inactive_box: StyleBox
+var active_box: StyleBox
+var ahead_gaining: LabelSettings
+var ahead_losing: LabelSettings
+var behind_gaining: LabelSettings
+var behind_losing: LabelSettings
+var best_segment: LabelSettings
+var idx: int
+var current := false
 
-func set_split_name(n: String) -> void:
-	name_label.text = n
-
-func add_comparison() -> void:
-	var comp_label := Label.new()
-	comparisons.add_child(comp_label)
-
-func start() -> void:
-	update(true)
-	add_theme_stylebox_override("panel", active_box)
-	grab_focus()
-
-func finish() -> void:
-	update(true)
-	add_theme_stylebox_override("panel", inactive_box)
-
+# This will perform like shit but its so much easier to code and I don't think it matters
 func update(active: bool) -> void:
-	for comp_idx in comparisons.get_children().size():
-		var idx := get_index()
-		var label := comparisons.get_child(comp_idx)
+	time_label.text = TimerSettings.round_off_no_decimal(MainTimer.get_segment_comparison(
+		idx, TimerSettings.active_comparison, TimerSettings.rta))
+	if active:
+		var t := MainTimer.current_time if TimerSettings.rta else MainTimer.current_game_time
+		var comp := MainTimer.get_segment_comparison(idx, TimerSettings.active_comparison, TimerSettings.rta)
+		var delta := t - comp
+		var string := ""
+		if delta >= 0.0:
+			string += "+"
+		string += str(TimerSettings.round_off(delta))
+		comp_label.text = string
 		
-		match TimerSettings.active_comp_types[comp_idx]:
-			TimerSettings.ComparisonType.COMPARISON_TYPE_NONE:
-				label.text = "-"
+		# handle label settings
+		if !current:
+			var last_delta := 0.0
+			if idx > 0:
+				last_delta = MainTimer.get_segment_comparison(idx - 1, TimerSettings.active_comparison, TimerSettings.rta)
 			
-			TimerSettings.ComparisonType.COMPARISON_TYPE_TIME:
-				var t := MainTimer.get_segment_comparison(idx, TimerSettings.active_comparisons[comp_idx], TimerSettings.rta)
-				if t != 0.0:
-					label.text = TimerSettings.round_off(t)
-				else:
-					label.text = "-"
-			
-			TimerSettings.ComparisonType.COMPARISON_TYPE_SEGMENT_DELTA:
-				var t := MainTimer.get_segment_comparison(idx, TimerSettings.active_comparisons[comp_idx], TimerSettings.rta)
-				if t != 0.0 and active:
-					var delta := (MainTimer.current_time if TimerSettings.rta else MainTimer.current_game_time) - t
-					label.text = ("+" if delta > 0 else "") + TimerSettings.round_off(delta)
-				else:
-					label.text = ""
-			
-			TimerSettings.ComparisonType.COMPARISON_TYPE_DELTA:
-				var t := MainTimer.get_segment_comparison(idx, TimerSettings.active_comparisons[comp_idx], TimerSettings.rta)
-				if t != 0.0 and active:
-					var delta := (MainTimer.current_time if TimerSettings.rta else MainTimer.current_game_time) - t
-					label.text = ("+" if delta > 0 else "") + TimerSettings.round_off(delta)
-				else:
-					label.text = ""
+			if delta > 0.0:
+				comp_label.label_settings = ahead_gaining if delta < last_delta else ahead_losing
+			else:
+				comp_label.label_settings = behind_gaining if delta > last_delta else behind_gaining
+		else:
+			comp_label.label_settings = null
+	
+	else:
+		comp_label.text = ""
+	
+	# set StyleBox depending on if this is the current split or not
+	if current:
+		add_theme_stylebox_override("panel", active_box)
+	else:
+		add_theme_stylebox_override("panel", inactive_box)
 
-func reset() -> void:
-	for comp_idx in comparisons.get_children().size():
-		var idx := get_index()
-		var label := comparisons.get_child(comp_idx)
-		
-		match TimerSettings.active_comp_types[comp_idx]:
-			TimerSettings.ComparisonType.COMPARISON_TYPE_NONE:
-				label.text = "-"
-			TimerSettings.ComparisonType.COMPARISON_TYPE_TIME:
-				var t := MainTimer.get_segment_comparison(idx, TimerSettings.active_comparisons[comp_idx], TimerSettings.rta)
-				if t != 0.0:
-					label.text = TimerSettings.round_off(t)
-				else:
-					label.text = "-"
-			TimerSettings.ComparisonType.COMPARISON_TYPE_DELTA:
-				label.text = ""
-			TimerSettings.ComparisonType.COMPARISON_TYPE_SEGMENT_DELTA:
-				label.text = ""
+func update_name() -> void:
+	name_label.text = MainTimer.get_segment_name(idx)
+
+func update_layout(root: Control) -> void:
+	inactive_box = root.inactive_split_bg_stylebox
+	active_box = root.active_split_bg_stylebox
+	ahead_gaining = root.split_ahead_gaining_label
+	ahead_losing = root.split_ahead_losing_label
+	behind_gaining = root.split_behind_gaining_label
+	behind_losing = root.split_behind_losing_label
+	best_segment = root.split_best_segment_label

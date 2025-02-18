@@ -2,55 +2,72 @@ extends TimerElement
 
 @onready var split_scene := preload("res://TimerElements/Splits/split.tscn")
 
-@export var splits_container: VBoxContainer
 var current_split := -1
+var shown_splits := 10
+var shown_splits_after_current := 1
+var last_split_pinned := true
+var split_focus := 0
+var seg_count: int
 
 func run_updated() -> void:
 	# Regenerate timer comparisons
 	MainTimer.regenerate_comparisons()
-	
+	split_focus = 0
+	seg_count = MainTimer.get_segment_count()
+	update_splits(false)
+
+func update_splits(active: bool) -> void:
 	# Empty the splits container and refill it
-	for child in splits_container.get_children():
+	for child in get_children():
 		child.queue_free()
 	
-	# stupid, but call_deferred isn't saving me for some reason. Need to wait for old splits to be freed.
-	await get_tree().create_timer(0.01).timeout
-	for split_idx in MainTimer.get_segment_count():
+	var split_focus_top: int = clamp(split_focus + shown_splits_after_current - shown_splits, 0, seg_count - 1)
+	for i in shown_splits:
+		var idx := i + split_focus_top
+		if i >= seg_count:
+			break
 		var split := split_scene.instantiate()
-		splits_container.add_child(split)
-		for c in TimerSettings.active_comparisons.size():
-			split.add_comparison()
-		
-		split.set_split_name(MainTimer.get_segment_name(split_idx))
-	
-	update_all_splits()
+		if last_split_pinned and i == shown_splits - 1:
+			split.idx = MainTimer.get_segment_count() - 1
+		else:
+			split.idx = idx
+		if split.idx == current_split:
+			split.current = true
+		split.update_layout(root)
+		split.update_name()
+		split.update(active)
+		add_child(split)
+
+# Scroll inputs
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("scroll_up") and split_focus > 0:
+		split_focus -= 1
+		update_splits(MainTimer.timer_phase != TimerSettings.TimerPhase.NOT_RUNNING)
+	elif Input.is_action_just_pressed("scroll_down") and split_focus < seg_count - 1:
+		split_focus += 1
+		update_splits(MainTimer.timer_phase != TimerSettings.TimerPhase.NOT_RUNNING)
 
 # Update current split and tell splits to self update
 func timer_process() -> void:
 	# Change the currently active split and set the previous split to a finished state
 	if MainTimer.current_split_index != current_split:
-		if current_split >= 0:
-			splits_container.get_child(current_split).old_split.finish()
-		
-		if MainTimer.timer_phase == TimerSettings.TimerPhase.RUNNING:
-			current_split = MainTimer.current_split_index
-			splits_container.get_child(current_split).start()
-	
-	# Update the current split
-	splits_container.get_child(current_split).update()
+		current_split = MainTimer.current_split_index
+		# Update splits, redraw everything (i'm lazy)
+		update_splits(true)
+	else:
+		# Update all splits without changes
+		for split in get_children():
+			split.update(true)
 
-func update_all_splits() -> void:
-	for split in splits_container.get_children():
-		split.update(false)
+func timer_phase_change(_phase: TimerSettings.TimerPhase) -> void:
+	#if phase == TimerSettings.TimerPhase.ENDED:
+		#get_child(current_split).finish()
+		#current_split = -1
+	#elif phase == TimerSettings.TimerPhase.NOT_RUNNING:
+		#reset_all_splits()
+		#current_split = -1
+	pass
 
-func reset_all_splits() -> void:
-	for split in splits_container.get_children():
-		split.reset()
-
-func timer_phase_change(phase: TimerSettings.TimerPhase) -> void:
-	if phase == TimerSettings.TimerPhase.ENDED:
-		splits_container.get_child(current_split).finish()
-		current_split = -1
-	elif phase == TimerSettings.TimerPhase.NOT_RUNNING:
-		reset_all_splits()
-		current_split = -1
+func layout_updated() -> void:
+	for split in get_children():
+		split.update_layout(root)

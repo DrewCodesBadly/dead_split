@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c1s0bvagirw23" path="res://TimerElements/Title/title.gd" id="1_j4s0j"]
 
-[node name="Title" type="VBoxContainer"]
+[node name="Title" type="VBoxContainer" node_paths=PackedStringArray("game_name", "cat_name")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -11,6 +11,8 @@ grow_vertical = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 script = ExtResource("1_j4s0j")
+game_name = NodePath("GameName")
+cat_name = NodePath("CategoryName")
 
 [node name="GameName" type="Label" parent="."]
 layout_mode = 2

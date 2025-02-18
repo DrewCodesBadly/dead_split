@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cvaehsavnc4v5" path="res://TimerElements/Splits/splits.gd" id="1_4sod3"]
 
-[node name="Splits" type="ScrollContainer" node_paths=PackedStringArray("splits_container")]
+[node name="Splits" type="VBoxContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -10,16 +10,5 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-follow_focus = true
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 3
-script = ExtResource("1_4sod3")
-splits_container = NodePath("VBoxContainer")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
 alignment = 2
+script = ExtResource("1_4sod3")

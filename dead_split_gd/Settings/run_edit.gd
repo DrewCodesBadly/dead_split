@@ -81,9 +81,9 @@ func _on_visibility_changed() -> void:
 		game_name_edit.text = editable_run.get_game_name()
 		category_name_edit.text = editable_run.get_category_name()
 		attempt_count_edit.text = str(editable_run.get_attempt_count())
-	
-	update_custom_comparisons_list()
-	update_segment_editor()
+		
+		update_custom_comparisons_list()
+		update_segment_editor()
 
 func _on_save_button_pressed() -> void:
 	MainTimer.update_run(editable_run)

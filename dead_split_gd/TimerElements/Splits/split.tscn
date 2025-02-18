@@ -1,15 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://1arpdlm8c40m"]
+[gd_scene load_steps=3 format=3 uid="uid://1arpdlm8c40m"]
 
+[ext_resource type="StyleBox" uid="uid://dlsc2yp32un3x" path="res://DefaultTheming/InactiveSplitStyleBox.tres" id="1_0k05p"]
 [ext_resource type="Script" uid="uid://bdhhc8dwk6trb" path="res://TimerElements/Splits/split.gd" id="1_d7lqx"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d7lqx"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_amq76"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0k05p"]
-bg_color = Color(0.20871, 0.20871, 0.20871, 1)
-
-[node name="Split" type="PanelContainer" node_paths=PackedStringArray("name_label", "comparisons")]
+[node name="Split" type="PanelContainer" node_paths=PackedStringArray("name_label", "comp_label", "time_label")]
 clip_contents = true
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,19 +11,19 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
+size_flags_vertical = 6
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_d7lqx")
+theme_override_styles/panel = ExtResource("1_0k05p")
 script = ExtResource("1_d7lqx")
 name_label = NodePath("SplitContainer/SplitName")
-comparisons = NodePath("SplitContainer/Comparisons")
-inactive_box = SubResource("StyleBoxEmpty_amq76")
-active_box = SubResource("StyleBoxFlat_0k05p")
+comp_label = NodePath("SplitContainer/Comparison")
+time_label = NodePath("SplitContainer/Time")
 
-[node name="SplitContainer" type="HSplitContainer" parent="."]
+[node name="SplitContainer" type="GridContainer" parent="."]
 layout_direction = 2
 layout_mode = 2
 mouse_filter = 2
-dragging_enabled = false
+columns = 3
 
 [node name="SplitName" type="Label" parent="SplitContainer"]
 custom_minimum_size = Vector2(200, 0)
@@ -37,6 +31,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 text_overrun_behavior = 3
 
-[node name="Comparisons" type="HBoxContainer" parent="SplitContainer"]
+[node name="Comparison" type="Label" parent="SplitContainer"]
 layout_mode = 2
-alignment = 2
+size_flags_vertical = 1
+horizontal_alignment = 1
+
+[node name="Time" type="Label" parent="SplitContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+horizontal_alignment = 2

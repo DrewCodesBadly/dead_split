@@ -25,7 +25,8 @@ func _on_run_file_chooser_file_selected(path: String) -> void:
 	owner.timer_load_file()
 
 func _on_save_run_to_file_pressed() -> void:
-	window.timer_save_run()
+	var success := MainTimer.try_save_run(TimerSettings.current_file_path)
+	run_saved_label.text = "Run saved!" if success else "Failed to save run - check your path is valid"
 	run_saved_label.show()
 
 func _on_run_file_chooser_canceled() -> void:
