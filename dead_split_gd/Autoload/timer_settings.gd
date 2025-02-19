@@ -17,6 +17,7 @@ var rta := true
 var time_rounding := 0.01
 
 var active_comparison: String = "Personal Best"
+var active_comp_idx: int = 0
 
 var working_directory_path: String = ""
 var current_file_path: String = "None"

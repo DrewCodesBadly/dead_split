@@ -2,6 +2,7 @@ extends DeadSplitTimer
 
 @warning_ignore("unused_signal")
 signal run_changed
+signal comparison_changed
 
 func _ready() -> void:
 	new_run()
@@ -30,3 +31,15 @@ func _hotkey_pressed(hotkey_id: int) -> void:
 			toggle_pause()
 		8:
 			toggle_timing_method()
+		9:
+			var comp_list := get_comparisons()
+			TimerSettings.active_comp_idx = (TimerSettings.active_comp_idx + 1) % comp_list.size()
+			var comp := comp_list[TimerSettings.active_comp_idx]
+			TimerSettings.active_comparison = comp
+			comparison_changed.emit(comp)
+		10:
+			var comp_list := get_comparisons()
+			TimerSettings.active_comp_idx = (TimerSettings.active_comp_idx - 1) % comp_list.size()
+			var comp := comp_list[TimerSettings.active_comp_idx]
+			TimerSettings.active_comparison = comp
+			comparison_changed.emit(comp)

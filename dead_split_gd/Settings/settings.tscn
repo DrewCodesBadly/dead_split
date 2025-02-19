@@ -418,6 +418,18 @@ layout_mode = 2
 [node name="Label" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/ToggleTimingMethod" index="0"]
 text = "Toggle Timing Method"
 
+[node name="CycleComparisonFwd" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer" instance=ExtResource("8_eh28s")]
+layout_mode = 2
+
+[node name="Label" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/CycleComparisonFwd" index="0"]
+text = "Cycle Comparison Forward"
+
+[node name="CycleComparisonBack" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer" instance=ExtResource("8_eh28s")]
+layout_mode = 2
+
+[node name="Label" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/CycleComparisonBack" index="0"]
+text = "Cycle Comparison Back"
+
 [node name="LayoutAdv" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("chooser")]
 layout_mode = 1
 anchors_preset = 15
@@ -594,3 +606,5 @@ use_native_dialog = true
 [editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/UndoPauses"]
 [editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/TogglePause"]
 [editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/ToggleTimingMethod"]
+[editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/CycleComparisonFwd"]
+[editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/CycleComparisonBack"]

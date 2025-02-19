@@ -2,6 +2,7 @@ extends Control
 
 @export var timer_elements: VBoxContainer
 @export var timer_label: Label
+@export var notification_popup: CenterContainer
 
 @export_subgroup("Theme files")
 var timer_theme: Theme
@@ -58,6 +59,8 @@ func _process(_delta: float) -> void:
 	timer_label.text = TimerSettings.round_off(MainTimer.current_time if TimerSettings.rta else MainTimer.current_game_time)
 
 func _ready() -> void:
+	MainTimer.comparison_changed.connect(comp_changed)
+	
 	refresh_layout()
 	var title = load("res://TimerElements/Title/title.tscn")
 	add_element(title.instantiate())
@@ -74,6 +77,11 @@ func add_element(element: TimerElement) -> void:
 	timer_running.connect(element.timer_process)
 	timer_phase_changed.connect(element.timer_phase_change)
 	layout_changed.connect(element.layout_updated)
+
+func comp_changed(comp: String) -> void:
+	notification_popup.set_text(comp)
+	notification_popup.flash()
+	MainTimer.run_changed.emit() # lazy and unnecessarily slow but no one will notice :3
 
 # horror show. I could've made this arrays with an enum. Too late now.
 func refresh_layout() -> void:

@@ -206,6 +206,11 @@ impl DeadSplitTimer {
         EditableRun::from_run(self.timer.run())
     }
 
+    #[func]
+    fn get_comparisons(&self) -> Array<GString> {
+        Array::from_iter(self.timer.run().comparisons().map(|s| GString::from(s)))
+    }
+
     // hotkeys
     #[func]
     fn add_hotkey(&mut self, key_string: String, hotkey_id: i32) -> bool {
