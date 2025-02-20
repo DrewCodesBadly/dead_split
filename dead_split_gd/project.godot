@@ -32,6 +32,7 @@ window/subwindows/embed_subwindows=false
 folder_colors={
 "res://Autoload/": "purple",
 "res://DefaultTheming/": "yellow",
+"res://ThemeDumper/": "orange",
 "res://TimerElements/": "red"
 }
 

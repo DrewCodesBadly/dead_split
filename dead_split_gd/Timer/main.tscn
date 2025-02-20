@@ -6,7 +6,7 @@
 [ext_resource type="StyleBox" uid="uid://kfvfxcxihf30" path="res://DefaultTheming/TimerBackgroundStyleBox.tres" id="3_mko0i"]
 [ext_resource type="Script" uid="uid://c72mtte05p31d" path="res://Timer/notification_popup.gd" id="5_vfm8o"]
 
-[node name="TimerWindow" type="Control" node_paths=PackedStringArray("timer_elements", "timer_label", "notification_popup")]
+[node name="TimerWindow" type="Control" node_paths=PackedStringArray("timer_elements", "timer_label", "notification_popup", "panel")]
 clip_contents = true
 layout_mode = 3
 anchors_preset = 15
@@ -20,6 +20,7 @@ script = ExtResource("1_0xm2m")
 timer_elements = NodePath("PanelContainer/ElementsAndTimer/TimerElements")
 timer_label = NodePath("PanelContainer/ElementsAndTimer/TimerLabel")
 notification_popup = NodePath("NotificationPopup")
+panel = NodePath("PanelContainer")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 clip_contents = true

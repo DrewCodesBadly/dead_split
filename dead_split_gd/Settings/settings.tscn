@@ -200,11 +200,11 @@ vertical_alignment = 1
 title = "Open a Directory"
 ok_button_text = "Select Current Folder"
 file_mode = 2
-access = 1
+access = 2
 use_native_dialog = true
 
 [node name="RunFileChooser" type="FileDialog" parent="MenuToggle/MenusContainer/Files"]
-access = 1
+access = 2
 filters = PackedStringArray("*.lss")
 use_native_dialog = true
 
@@ -438,121 +438,35 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("11_ccbwi")
-chooser = NodePath("VBoxContainer/ResourceChooser")
+chooser = NodePath("ResourceChooser")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MenuToggle/MenusContainer/LayoutAdv"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
+[node name="Instructions" type="Label" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
 layout_mode = 2
-text = "This is really jank and might not work.
-Everything in provided resources needs to
-be a sub-resource, accessing other files
-probably won't work."
+text = "Loads a resource pack containing timer styles.
+Instructions on making your own resource pack
+are available in the readme on GitHub."
 
-[node name="Label2" type="Label" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
+[node name="CurrentLoaded" type="Label" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
 layout_mode = 2
-text = "Timer Theme path:"
 
-[node name="TimerThemeBtn" type="Button" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
+[node name="LoadTheme" type="Button" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
 layout_mode = 2
-text = "Change..."
+text = "Load timer theme..."
 
-[node name="Label3" type="Label" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
+[node name="ResetDefault" type="Button" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
 layout_mode = 2
-text = "Timer stopped LabelSettings path:"
+text = "Reset to default theme"
 
-[node name="TimerStoppedBtn" type="Button" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Change..."
-
-[node name="Label4" type="Label" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Timer running LabelSettings path:"
-
-[node name="TimerRunningBtn" type="Button" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Change..."
-
-[node name="Label5" type="Label" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Timer finished LabelSettings path:"
-
-[node name="TimerFinishedBtn" type="Button" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Change..."
-
-[node name="Label6" type="Label" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Timer finished (PB) LabelSettings path:"
-
-[node name="TimerFinishedPBBtn" type="Button" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Change..."
-
-[node name="Label7" type="Label" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Split ahead (gaining) LabelSettings path:"
-
-[node name="SplitAheadGainingBtn" type="Button" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Change..."
-
-[node name="Label8" type="Label" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Split ahead (losing) LabelSettings path:"
-
-[node name="SplitAheadLosingBtn" type="Button" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Change..."
-
-[node name="Label9" type="Label" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Split behind (gaining) LabelSettings path:"
-
-[node name="SplitBehindGainingBtn" type="Button" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Change..."
-
-[node name="Label10" type="Label" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Split behind (losing) LabelSettings path:"
-
-[node name="SplitBehindLosingBtn" type="Button" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Change..."
-
-[node name="Label11" type="Label" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Timer background StyleBox path:"
-
-[node name="TimerBGStyleBoxBtn" type="Button" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Change..."
-
-[node name="Label12" type="Label" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Active split StyleBox path:"
-
-[node name="ActiveSplitStyleBoxBtn" type="Button" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Change..."
-
-[node name="Label13" type="Label" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Inactive split StyleBox path:"
-
-[node name="InactiveSplitStyleBoxBtn2" type="Button" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
-layout_mode = 2
-text = "Change..."
-
-[node name="ResourceChooser" type="FileDialog" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
+[node name="ResourceChooser" type="FileDialog" parent="MenuToggle/MenusContainer/LayoutAdv"]
 title = "Open a File"
 ok_button_text = "Open"
 file_mode = 0
-access = 1
+access = 2
 filters = PackedStringArray("*.tres")
 use_native_dialog = true
 
@@ -583,19 +497,7 @@ use_native_dialog = true
 [connection signal="pressed" from="MenuToggle/MenusContainer/RunEdit/SaveButton" to="MenuToggle/MenusContainer/RunEdit" method="_on_save_button_pressed"]
 [connection signal="visibility_changed" from="MenuToggle/MenusContainer/Hotkeys" to="MenuToggle/MenusContainer/Hotkeys" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="MenuToggle/MenusContainer/LayoutAdv" to="MenuToggle/MenusContainer/LayoutAdv" method="_on_visibility_changed"]
-[connection signal="pressed" from="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer/TimerThemeBtn" to="MenuToggle/MenusContainer/LayoutAdv" method="_on_timer_theme_btn_pressed"]
-[connection signal="pressed" from="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer/TimerStoppedBtn" to="MenuToggle/MenusContainer/LayoutAdv" method="_on_timer_stopped_btn_pressed"]
-[connection signal="pressed" from="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer/TimerRunningBtn" to="MenuToggle/MenusContainer/LayoutAdv" method="_on_timer_running_btn_pressed"]
-[connection signal="pressed" from="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer/TimerFinishedBtn" to="MenuToggle/MenusContainer/LayoutAdv" method="_on_timer_finished_btn_pressed"]
-[connection signal="pressed" from="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer/TimerFinishedPBBtn" to="MenuToggle/MenusContainer/LayoutAdv" method="_on_timer_finished_pb_btn_pressed"]
-[connection signal="pressed" from="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer/SplitAheadGainingBtn" to="MenuToggle/MenusContainer/LayoutAdv" method="_on_split_ahead_gaining_btn_pressed"]
-[connection signal="pressed" from="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer/SplitAheadLosingBtn" to="MenuToggle/MenusContainer/LayoutAdv" method="_on_split_ahead_losing_btn_pressed"]
-[connection signal="pressed" from="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer/SplitBehindGainingBtn" to="MenuToggle/MenusContainer/LayoutAdv" method="_on_split_behind_gaining_btn_pressed"]
-[connection signal="pressed" from="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer/SplitBehindLosingBtn" to="MenuToggle/MenusContainer/LayoutAdv" method="_on_split_behind_losing_btn_pressed"]
-[connection signal="pressed" from="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer/TimerBGStyleBoxBtn" to="MenuToggle/MenusContainer/LayoutAdv" method="_on_timer_bg_style_box_btn_pressed"]
-[connection signal="pressed" from="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer/ActiveSplitStyleBoxBtn" to="MenuToggle/MenusContainer/LayoutAdv" method="_on_active_split_style_box_btn_pressed"]
-[connection signal="pressed" from="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer/InactiveSplitStyleBoxBtn2" to="MenuToggle/MenusContainer/LayoutAdv" method="_on_inactive_split_style_box_btn_2_pressed"]
-[connection signal="file_selected" from="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer/ResourceChooser" to="MenuToggle/MenusContainer/LayoutAdv" method="_on_resource_chooser_file_selected"]
+[connection signal="file_selected" from="MenuToggle/MenusContainer/LayoutAdv/ResourceChooser" to="MenuToggle/MenusContainer/LayoutAdv" method="_on_resource_chooser_file_selected"]
 
 [editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/StartSplit"]
 [editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/Reset"]

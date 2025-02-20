@@ -67,7 +67,3 @@ func timer_phase_change(_phase: TimerSettings.TimerPhase) -> void:
 		#reset_all_splits()
 		#current_split = -1
 	pass
-
-func layout_updated() -> void:
-	for split in get_children():
-		split.update_layout(root)
