@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="TimerTheme" load_steps=15 format=3 uid="uid://ctp0seqrf75gn"]
+[gd_resource type="Resource" script_class="TimerTheme" load_steps=16 format=3 uid="uid://ctp0seqrf75gn"]
 
 [ext_resource type="StyleBox" uid="uid://djp0luqgn7mt" path="res://DefaultTheming/ActiveSplitStyleBox.tres" id="1_7nn3w"]
 [ext_resource type="Script" uid="uid://xqjb0cnnalet" path="res://Timer/timer_theme.gd" id="1_fthqg"]
@@ -12,6 +12,7 @@
 [ext_resource type="LabelSettings" uid="uid://rpacv50ird6a" path="res://DefaultTheming/SplitBehindLosing.tres" id="7_y2xp7"]
 [ext_resource type="LabelSettings" uid="uid://bjhm2jfip7wro" path="res://DefaultTheming/SplitBestSegment.tres" id="8_iis77"]
 [ext_resource type="StyleBox" uid="uid://kfvfxcxihf30" path="res://DefaultTheming/TimerBackgroundStyleBox.tres" id="9_dm624"]
+[ext_resource type="Material" uid="uid://hfe0ww7rirbu" path="res://DefaultTheming/TimerBackgroundShader.tres" id="9_rmpsn"]
 [ext_resource type="LabelSettings" uid="uid://cmoypecdsjicr" path="res://DefaultTheming/TimerFinishedPB.tres" id="11_c8qwd"]
 [ext_resource type="LabelSettings" uid="uid://b2fya44iga4er" path="res://DefaultTheming/TimerRunning.tres" id="12_vmtws"]
 
@@ -30,4 +31,5 @@ split_best_segment_label = ExtResource("8_iis77")
 timer_background_stylebox = ExtResource("9_dm624")
 active_split_bg_stylebox = ExtResource("1_7nn3w")
 inactive_split_bg_stylebox = ExtResource("2_rmpsn")
+timer_background_material = ExtResource("9_rmpsn")
 metadata/_custom_type_script = "uid://xqjb0cnnalet"

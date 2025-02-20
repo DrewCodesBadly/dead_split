@@ -74,3 +74,4 @@ func reload_theme() -> void:
 	theme = TimerSettings.theme.timer_theme
 	layout_changed.emit()
 	panel.add_theme_stylebox_override("panel", TimerSettings.theme.timer_background_stylebox)
+	panel.material = TimerSettings.theme.timer_background_material

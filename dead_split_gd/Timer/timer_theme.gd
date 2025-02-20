@@ -15,3 +15,4 @@ class_name TimerTheme
 @export var timer_background_stylebox: StyleBox 
 @export var active_split_bg_stylebox: StyleBox
 @export var inactive_split_bg_stylebox: StyleBox
+@export var timer_background_material: Material # hell yeah we got shader support for no reason

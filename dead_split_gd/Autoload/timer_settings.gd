@@ -63,8 +63,26 @@ func round_off_no_decimal(val: float) -> String:
 
 func reload_theme() -> void:
 	if timer_theme_path != "" and timer_theme_path.is_absolute_path():
-		var theme_try = load(timer_theme_path)
-		if theme_try is TimerTheme:
-			theme = theme_try
+		var zip := ZIPReader.new()
+		var err := zip.open(timer_theme_path)
+		if err != OK:
+			theme = load("res://DefaultTheming/DefaultTimerTheme.tres")
+		else:
+			var new_theme := TimerTheme.new()
+			# jank here because actually saving TimerTheme would save a script -
+			# this causes the script to load twice and break :(
+			for property in new_theme.get_property_list():
+				# once again using temp files due to jank zip interface
+				# thankfully the filenames are the same as the properties so we can for loop this
+				var file_name: String = property["name"] + ".tres"
+				if zip.file_exists(file_name):
+					var temp_file := FileAccess.create_temp(
+						FileAccess.READ_WRITE, "resource_load_temp", ".tres", false)
+					temp_file.store_string(zip.read_file(file_name).get_string_from_utf8()) # copy
+					temp_file.close()
+					var resource: Resource = ResourceLoader.load(temp_file.get_path_absolute())
+					new_theme.set(property["name"], resource)
+			
+			theme = new_theme
 	else:
 		theme = load("res://DefaultTheming/DefaultTimerTheme.tres")

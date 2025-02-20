@@ -6,6 +6,6 @@
 position = Vector2i(0, 36)
 visible = true
 access = 2
-filters = PackedStringArray("*.tres")
+filters = PackedStringArray("*.zip")
 use_native_dialog = true
 script = ExtResource("1_rca1b")

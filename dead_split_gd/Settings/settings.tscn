@@ -48,7 +48,7 @@ item_1/text = "Files"
 item_2/text = "Edit Splits"
 item_3/text = "Edit Layout"
 item_4/text = "Edit Hotkeys"
-item_5/text = "Layout (Advanced)"
+item_5/text = "Theme"
 item_6/text = "Quit DeadSplit"
 
 [node name="UseIGTToggle" type="CheckButton" parent="VBoxContainer"]
@@ -430,7 +430,7 @@ layout_mode = 2
 [node name="Label" parent="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/CycleComparisonBack" index="0"]
 text = "Cycle Comparison Back"
 
-[node name="LayoutAdv" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("chooser")]
+[node name="Theme" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("chooser", "load_theme_button", "path_label")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -439,35 +439,37 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("11_ccbwi")
 chooser = NodePath("ResourceChooser")
+load_theme_button = NodePath("VBoxContainer/LoadTheme")
+path_label = NodePath("VBoxContainer/CurrentLoaded")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MenuToggle/MenusContainer/LayoutAdv"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuToggle/MenusContainer/Theme"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Instructions" type="Label" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
+[node name="Instructions" type="Label" parent="MenuToggle/MenusContainer/Theme/VBoxContainer"]
 layout_mode = 2
 text = "Loads a resource pack containing timer styles.
 Instructions on making your own resource pack
 are available in the readme on GitHub."
 
-[node name="CurrentLoaded" type="Label" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
+[node name="CurrentLoaded" type="Label" parent="MenuToggle/MenusContainer/Theme/VBoxContainer"]
 layout_mode = 2
 
-[node name="LoadTheme" type="Button" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
+[node name="LoadTheme" type="Button" parent="MenuToggle/MenusContainer/Theme/VBoxContainer"]
 layout_mode = 2
 text = "Load timer theme..."
 
-[node name="ResetDefault" type="Button" parent="MenuToggle/MenusContainer/LayoutAdv/VBoxContainer"]
+[node name="ResetDefault" type="Button" parent="MenuToggle/MenusContainer/Theme/VBoxContainer"]
 layout_mode = 2
 text = "Reset to default theme"
 
-[node name="ResourceChooser" type="FileDialog" parent="MenuToggle/MenusContainer/LayoutAdv"]
+[node name="ResourceChooser" type="FileDialog" parent="MenuToggle/MenusContainer/Theme"]
 title = "Open a File"
 ok_button_text = "Open"
 file_mode = 0
 access = 2
-filters = PackedStringArray("*.tres")
+filters = PackedStringArray("*.zip")
 use_native_dialog = true
 
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
@@ -496,8 +498,11 @@ use_native_dialog = true
 [connection signal="pressed" from="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/SplitContainer/AddSeg" to="MenuToggle/MenusContainer/RunEdit" method="_on_add_seg_pressed"]
 [connection signal="pressed" from="MenuToggle/MenusContainer/RunEdit/SaveButton" to="MenuToggle/MenusContainer/RunEdit" method="_on_save_button_pressed"]
 [connection signal="visibility_changed" from="MenuToggle/MenusContainer/Hotkeys" to="MenuToggle/MenusContainer/Hotkeys" method="_on_visibility_changed"]
-[connection signal="visibility_changed" from="MenuToggle/MenusContainer/LayoutAdv" to="MenuToggle/MenusContainer/LayoutAdv" method="_on_visibility_changed"]
-[connection signal="file_selected" from="MenuToggle/MenusContainer/LayoutAdv/ResourceChooser" to="MenuToggle/MenusContainer/LayoutAdv" method="_on_resource_chooser_file_selected"]
+[connection signal="visibility_changed" from="MenuToggle/MenusContainer/Theme" to="MenuToggle/MenusContainer/Theme" method="_on_visibility_changed"]
+[connection signal="pressed" from="MenuToggle/MenusContainer/Theme/VBoxContainer/LoadTheme" to="MenuToggle/MenusContainer/Theme" method="_on_load_theme_pressed"]
+[connection signal="pressed" from="MenuToggle/MenusContainer/Theme/VBoxContainer/ResetDefault" to="MenuToggle/MenusContainer/Theme" method="_on_reset_default_pressed"]
+[connection signal="canceled" from="MenuToggle/MenusContainer/Theme/ResourceChooser" to="MenuToggle/MenusContainer/Theme" method="_on_resource_chooser_canceled"]
+[connection signal="file_selected" from="MenuToggle/MenusContainer/Theme/ResourceChooser" to="MenuToggle/MenusContainer/Theme" method="_on_resource_chooser_file_selected"]
 
 [editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/StartSplit"]
 [editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/Reset"]

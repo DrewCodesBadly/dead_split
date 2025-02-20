@@ -33,7 +33,6 @@ func update_splits(active: bool) -> void:
 			split.idx = idx
 		if split.idx == current_split:
 			split.current = true
-		split.update_layout(root)
 		split.update_name()
 		split.update(active)
 		add_child(split)
