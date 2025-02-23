@@ -30,6 +30,7 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 text_overrun_behavior = 3
+tab_stops = PackedFloat32Array(40)
 
 [node name="Comparison" type="Label" parent="SplitContainer"]
 layout_mode = 2

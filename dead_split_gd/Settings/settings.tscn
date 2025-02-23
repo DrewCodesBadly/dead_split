@@ -25,7 +25,7 @@ submenus = NodePath("VBoxContainer/Submenus")
 menus_container = NodePath("MenuToggle/MenusContainer")
 outer_toggle = NodePath("VBoxContainer")
 menu_toggle = NodePath("MenuToggle")
-quit_index = 6
+quit_index = 7
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 visible = false
@@ -42,14 +42,15 @@ layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_qeycx")
 theme_override_styles/panel = SubResource("StyleBoxEmpty_qeycx")
-item_count = 7
+item_count = 8
 item_0/text = "Quick Load a Run"
-item_1/text = "Files"
-item_2/text = "Edit Splits"
-item_3/text = "Edit Layout"
-item_4/text = "Edit Hotkeys"
-item_5/text = "Theme"
-item_6/text = "Quit DeadSplit"
+item_1/text = "Quick Load a Theme"
+item_2/text = "Files"
+item_3/text = "Edit Splits"
+item_4/text = "Edit Layout"
+item_5/text = "Edit Hotkeys"
+item_6/text = "Theme"
+item_7/text = "Quit DeadSplit"
 
 [node name="UseIGTToggle" type="CheckButton" parent="VBoxContainer"]
 layout_mode = 2
@@ -108,6 +109,35 @@ text = "No DeadSplit directory set! Please set one in the Files options first."
 autowrap_mode = 2
 
 [node name="FileList" type="ItemList" parent="MenuToggle/MenusContainer/QuickLoad/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_cfss5")
+
+[node name="QuickLoadTheme" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("no_dir_label", "file_list", "window")]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_cfss5")
+no_dir_label = NodePath("VBoxContainer/NoDirectoryLabel")
+file_list = NodePath("VBoxContainer/FileList")
+window = NodePath("../../..")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuToggle/MenusContainer/QuickLoadTheme"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="NoDirectoryLabel" type="Label" parent="MenuToggle/MenusContainer/QuickLoadTheme/VBoxContainer"]
+custom_minimum_size = Vector2(750, 0)
+layout_mode = 2
+text = "No DeadSplit directory set! Please set one in the Files options first."
+autowrap_mode = 2
+
+[node name="FileList" type="ItemList" parent="MenuToggle/MenusContainer/QuickLoadTheme/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_cfss5")
@@ -478,6 +508,8 @@ use_native_dialog = true
 [connection signal="pressed" from="MenuToggle/MenuBar/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="visibility_changed" from="MenuToggle/MenusContainer/QuickLoad" to="MenuToggle/MenusContainer/QuickLoad" method="_on_visibility_changed"]
 [connection signal="item_clicked" from="MenuToggle/MenusContainer/QuickLoad/VBoxContainer/FileList" to="MenuToggle/MenusContainer/QuickLoad" method="_on_item_list_item_clicked"]
+[connection signal="visibility_changed" from="MenuToggle/MenusContainer/QuickLoadTheme" to="MenuToggle/MenusContainer/QuickLoadTheme" method="_on_visibility_changed"]
+[connection signal="item_clicked" from="MenuToggle/MenusContainer/QuickLoadTheme/VBoxContainer/FileList" to="MenuToggle/MenusContainer/QuickLoadTheme" method="_on_item_list_item_clicked"]
 [connection signal="pressed" from="MenuToggle/MenusContainer/Files/VBoxContainer/WorkingDir/ChangeWorkingDir" to="MenuToggle/MenusContainer/Files/VBoxContainer/WorkingDir/ChangeWorkingDir" method="_on_pressed"]
 [connection signal="pressed" from="MenuToggle/MenusContainer/Files/VBoxContainer/ActiveFile/ChangeCurrentFile" to="MenuToggle/MenusContainer/Files/VBoxContainer/ActiveFile/ChangeCurrentFile" method="_on_pressed"]
 [connection signal="pressed" from="MenuToggle/MenusContainer/Files/VBoxContainer/HBoxContainer/SaveRunToFile" to="MenuToggle/MenusContainer/Files/VBoxContainer/ActiveFile/ChangeCurrentFile" method="_on_save_run_to_file_pressed"]

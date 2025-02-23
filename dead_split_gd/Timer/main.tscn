@@ -51,6 +51,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="NotificationPopup" type="CenterContainer" parent="." node_paths=PackedStringArray("label")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

@@ -5,7 +5,7 @@
  - Basically all the normal stuff livesplit does
  - Working global hotkeys (on my system anyway, check if the [global-hotkeys crate](https://crates.io/crates/global-hotkey) works on your system)
  - Importing .lss files from livesplit
- - Subsplits, working the same as in livesplit (WIP)
+ - Subsplits, working the same as in livesplit
  - Customizable layout using godot's resource system - see Themes for more info (You can even write a shader for your timer background!!!!!)
  - Full autosplitter support (WIP by which I mean literally does not exist)
  
