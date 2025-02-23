@@ -19,6 +19,7 @@ func _ready() -> void:
 
 func _on_close_requested() -> void:
 	# Save settings!
+	timer_window.update_settings()
 	timer_window.settings_open = false
 	MainTimer.run_changed.emit() # just assume run updated, it's easier than actually checking
 	queue_free()

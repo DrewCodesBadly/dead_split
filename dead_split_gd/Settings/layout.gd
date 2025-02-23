@@ -1,1 +1,41 @@
 extends ScrollContainer
+
+@export var title_check_box: CheckBox
+@export var attempt_count_check_box: CheckBox
+@export var finished_runs_check_box: CheckBox
+@export var show_splits_check_box: CheckBox
+@export var pin_last_check_box: CheckBox
+@export var shown_splits_num: SpinBox
+@export var upcoming_splits_num: SpinBox
+
+func _on_visibility_changed() -> void:
+	if visible:
+		title_check_box.button_pressed = TimerSettings.show_title
+		attempt_count_check_box.button_pressed = TimerSettings.show_attempt_count
+		finished_runs_check_box.button_pressed = TimerSettings.show_finished_runs
+		show_splits_check_box.button_pressed = TimerSettings.show_splits
+		pin_last_check_box.button_pressed = TimerSettings.last_split_pinned
+
+func _on_title_check_box_toggled(toggled_on: bool) -> void:
+	TimerSettings.show_title = toggled_on
+
+func _on_attempt_count_check_box_toggled(toggled_on: bool) -> void:
+	TimerSettings.show_attempt_count = toggled_on
+
+func _on_finished_runs_check_box_toggled(toggled_on: bool) -> void:
+	TimerSettings.show_finished_runs = toggled_on
+
+func _on_show_splits_check_box_toggled(toggled_on: bool) -> void:
+	TimerSettings.show_splits = toggled_on
+
+func _on_last_pinned_check_box_toggled(toggled_on: bool) -> void:
+	TimerSettings.last_split_pinned = toggled_on
+
+func _on_shown_splits_num_value_changed(value: float) -> void:
+	TimerSettings.shown_splits = floori(value)
+
+func _on_upcoming_splits_num_value_changed(value: float) -> void:
+	TimerSettings.shown_upcoming_splits = floori(value)
+
+func _on_one_line_check_box_toggled(toggled_on: bool) -> void:
+	TimerSettings.title_one_line = toggled_on

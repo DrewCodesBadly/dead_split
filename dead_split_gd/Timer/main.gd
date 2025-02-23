@@ -9,6 +9,8 @@ extends Control
 
 var old_timer_phase: int
 var settings_open := false
+var title: TimerElement
+var splits: TimerElement
 
 signal timer_phase_changed
 signal timer_running
@@ -48,11 +50,11 @@ func _ready() -> void:
 	MainTimer.comparison_changed.connect(comp_changed)
 	reload_theme()
 	
-	var title = load("res://TimerElements/Title/title.tscn")
-	add_element(title.instantiate())
+	title = load("res://TimerElements/Title/title.tscn").instantiate()
+	add_element(title)
 	
-	var splits = load("res://TimerElements/Splits/splits.tscn")
-	add_element(splits.instantiate())
+	splits = load("res://TimerElements/Splits/splits.tscn").instantiate()
+	add_element(splits)
 	
 	MainTimer.run_changed.emit()
 
@@ -75,3 +77,8 @@ func reload_theme() -> void:
 	layout_changed.emit()
 	panel.add_theme_stylebox_override("panel", TimerSettings.theme.timer_background_stylebox)
 	panel.material = TimerSettings.theme.timer_background_material
+
+func update_settings() -> void:
+	title.visible = TimerSettings.show_title
+	splits.visible = TimerSettings.show_splits
+	splits.update_settings()

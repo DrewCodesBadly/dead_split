@@ -361,8 +361,7 @@ text = "Add New Segment"
 layout_mode = 2
 text = "Save run changes"
 
-[node name="Layout" type="ScrollContainer" parent="MenuToggle/MenusContainer"]
-visible = false
+[node name="Layout" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("title_check_box", "attempt_count_check_box", "finished_runs_check_box", "show_splits_check_box", "pin_last_check_box", "shown_splits_num", "upcoming_splits_num")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -370,12 +369,91 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("8_xceo2")
+title_check_box = NodePath("VBoxContainer/GridContainer/TitleCheckBox")
+attempt_count_check_box = NodePath("VBoxContainer/GridContainer/AttemptCountCheckBox")
+finished_runs_check_box = NodePath("VBoxContainer/GridContainer/FinishedRunsCheckBox")
+show_splits_check_box = NodePath("VBoxContainer/GridContainer/ShowSplitsCheckBox")
+pin_last_check_box = NodePath("VBoxContainer/GridContainer/LastPinnedCheckBox")
+shown_splits_num = NodePath("VBoxContainer/GridContainer/ShownSplitsNum")
+upcoming_splits_num = NodePath("VBoxContainer/GridContainer/UpcomingSplitsNum")
 
-[node name="Label" type="Label" parent="MenuToggle/MenusContainer/Layout"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuToggle/MenusContainer/Layout"]
 layout_mode = 2
-text = "pffft you think I added easy to use settings????? funny joke
-go use the advanced settings
-you may need to install the godot editor"
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="InfoLabel" type="Label" parent="MenuToggle/MenusContainer/Layout/VBoxContainer"]
+layout_mode = 2
+text = "Visit theme settings to customize appearance"
+
+[node name="GridContainer" type="GridContainer" parent="MenuToggle/MenusContainer/Layout/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 2
+
+[node name="Label" type="Label" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Show Title"
+
+[node name="TitleCheckBox" type="CheckBox" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label8" type="Label" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Game/Category as One Line"
+
+[node name="OneLineCheckBox" type="CheckBox" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Show Attempt Count"
+
+[node name="AttemptCountCheckBox" type="CheckBox" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Show Finished Runs"
+
+[node name="FinishedRunsCheckBox" type="CheckBox" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label6" type="Label" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Show splits"
+
+[node name="ShowSplitsCheckBox" type="CheckBox" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Always Show Last Split"
+
+[node name="LastPinnedCheckBox" type="CheckBox" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label4" type="Label" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Number of Shown Splits"
+
+[node name="ShownSplitsNum" type="SpinBox" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+min_value = 1.0
+value = 1.0
+rounded = true
+allow_greater = true
+
+[node name="Label5" type="Label" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Upcoming Splits Shown"
+
+[node name="UpcomingSplitsNum" type="SpinBox" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+min_value = 1.0
+value = 1.0
+rounded = true
+allow_greater = true
 
 [node name="Hotkeys" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("window", "hotkeys_container")]
 visible = false
@@ -461,6 +539,7 @@ layout_mode = 2
 text = "Cycle Comparison Back"
 
 [node name="Theme" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("chooser", "load_theme_button", "path_label")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -529,6 +608,15 @@ use_native_dialog = true
 [connection signal="toggled" from="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer/IGTSwitch" to="MenuToggle/MenusContainer/RunEdit" method="_on_igt_switch_toggled"]
 [connection signal="pressed" from="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/SplitContainer/AddSeg" to="MenuToggle/MenusContainer/RunEdit" method="_on_add_seg_pressed"]
 [connection signal="pressed" from="MenuToggle/MenusContainer/RunEdit/SaveButton" to="MenuToggle/MenusContainer/RunEdit" method="_on_save_button_pressed"]
+[connection signal="visibility_changed" from="MenuToggle/MenusContainer/Layout" to="MenuToggle/MenusContainer/Layout" method="_on_visibility_changed"]
+[connection signal="toggled" from="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer/TitleCheckBox" to="MenuToggle/MenusContainer/Layout" method="_on_title_check_box_toggled"]
+[connection signal="toggled" from="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer/OneLineCheckBox" to="MenuToggle/MenusContainer/Layout" method="_on_one_line_check_box_toggled"]
+[connection signal="toggled" from="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer/AttemptCountCheckBox" to="MenuToggle/MenusContainer/Layout" method="_on_attempt_count_check_box_toggled"]
+[connection signal="toggled" from="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer/FinishedRunsCheckBox" to="MenuToggle/MenusContainer/Layout" method="_on_finished_runs_check_box_toggled"]
+[connection signal="toggled" from="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer/ShowSplitsCheckBox" to="MenuToggle/MenusContainer/Layout" method="_on_show_splits_check_box_toggled"]
+[connection signal="toggled" from="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer/LastPinnedCheckBox" to="MenuToggle/MenusContainer/Layout" method="_on_last_pinned_check_box_toggled"]
+[connection signal="value_changed" from="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer/ShownSplitsNum" to="MenuToggle/MenusContainer/Layout" method="_on_shown_splits_num_value_changed"]
+[connection signal="value_changed" from="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer/UpcomingSplitsNum" to="MenuToggle/MenusContainer/Layout" method="_on_upcoming_splits_num_value_changed"]
 [connection signal="visibility_changed" from="MenuToggle/MenusContainer/Hotkeys" to="MenuToggle/MenusContainer/Hotkeys" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="MenuToggle/MenusContainer/Theme" to="MenuToggle/MenusContainer/Theme" method="_on_visibility_changed"]
 [connection signal="pressed" from="MenuToggle/MenusContainer/Theme/VBoxContainer/LoadTheme" to="MenuToggle/MenusContainer/Theme" method="_on_load_theme_pressed"]

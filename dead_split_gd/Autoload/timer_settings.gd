@@ -14,6 +14,14 @@ enum TimerPhase {
 }
 
 var rta := true
+var show_title := true
+var show_splits := true
+var show_attempt_count := true
+var show_finished_runs := true
+var title_one_line := false
+var shown_splits := 10
+var shown_upcoming_splits := 1
+var last_split_pinned := true
 var time_rounding := 0.01
 
 var active_comparison: String = "Personal Best"
@@ -36,9 +44,12 @@ func round_off(val: float) -> String:
 		if fmod(val, 60.0) < 10.0:
 			out_string += "0"
 	
-	out_string += str(snapped(fmod(val, 60.0), time_rounding))
-	if fmod(val, 1.0) < 0.1:
-		out_string += "0"
+	var decimal: float = snapped(fmod(val, 60.0), time_rounding)
+	var decimal_str := str(decimal)
+	var expected_chars := str(time_rounding).length() + (1 if decimal < 0.0 else 0)
+	while decimal_str.length() < expected_chars:
+		decimal_str += "0"
+	out_string += decimal_str
 	
 	return out_string
 

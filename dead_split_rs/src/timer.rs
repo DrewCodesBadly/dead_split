@@ -195,6 +195,22 @@ impl DeadSplitTimer {
         self.timer.run().category_name().to_owned()
     }
 
+    #[func]
+    fn get_attempt_count(&self) -> i32 {
+        self.timer.run().attempt_count() as i32
+    }
+
+    #[func]
+    fn get_finished_run_count(&self) -> i32 {
+        let mut count: i32 = 0;
+        for attempt in self.timer.run().attempt_history() {
+            if let Some(_) = attempt.time().real_time {
+                count += 1;
+            }
+        }
+        count
+    }
+
     // run interfacing
     #[func]
     fn update_run(&mut self, editable_run: Gd<EditableRun>) {

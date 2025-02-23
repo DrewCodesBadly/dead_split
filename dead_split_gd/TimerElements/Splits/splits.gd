@@ -61,14 +61,14 @@ func run_updated() -> void:
 		i += 1
 	
 	# Debug: print out the splits array
-	for data in splits_array:
-		if data is SubsplitData:
-			print("Subsplit: named " + data.split_name + " starting/ending at " \
-				+ str(data.start_index) + " " + str(data.index) + " containing the following:")
-			for split in data.subsplits:
-				print("\t" + split.split_name)
-		else:
-			print("Split: named " + data.split_name)
+	#for data in splits_array:
+		#if data is SubsplitData:
+			#print("Subsplit: named " + data.split_name + " starting/ending at " \
+				#+ str(data.start_index) + " " + str(data.index) + " containing the following:")
+			#for split in data.subsplits:
+				#print("\t" + split.split_name)
+		#else:
+			#print("Split: named " + data.split_name)
 	
 	update_splits()
 
@@ -149,11 +149,12 @@ func timer_process() -> void:
 		for split in get_children():
 			split.update()
 
-func timer_phase_change(_phase: TimerSettings.TimerPhase) -> void:
-	#if phase == TimerSettings.TimerPhase.ENDED:
-		#get_child(current_split).finish()
-		#current_split = -1
-	#elif phase == TimerSettings.TimerPhase.NOT_RUNNING:
-		#reset_all_splits()
-		#current_split = -1
-	pass
+func timer_phase_change(phase: TimerSettings.TimerPhase) -> void:
+	if phase == TimerSettings.TimerPhase.NOT_RUNNING:
+		split_focus = 0
+		update_splits()
+
+func update_settings() -> void:
+	shown_splits = TimerSettings.shown_splits
+	shown_splits_after_current = TimerSettings.shown_upcoming_splits
+	last_split_pinned = TimerSettings.last_split_pinned
