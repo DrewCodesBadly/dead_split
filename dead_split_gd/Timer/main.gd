@@ -47,14 +47,19 @@ func _process(_delta: float) -> void:
 	timer_label.text = TimerSettings.round_off(MainTimer.current_time if TimerSettings.rta else MainTimer.current_game_time)
 
 func _ready() -> void:
-	MainTimer.comparison_changed.connect(comp_changed)
-	reload_theme()
-	
 	title = load("res://TimerElements/Title/title.tscn").instantiate()
 	add_element(title)
 	
 	splits = load("res://TimerElements/Splits/splits.tscn").instantiate()
 	add_element(splits)
+	
+	# Try to load in any settings
+	TimerSettings.try_load()
+	MainTimer.try_load_run(TimerSettings.current_file_path)
+	update_settings()
+	reload_theme()
+	
+	MainTimer.comparison_changed.connect(comp_changed)
 	
 	MainTimer.run_changed.emit()
 

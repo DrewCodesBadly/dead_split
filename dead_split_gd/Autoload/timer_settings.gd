@@ -31,6 +31,8 @@ var working_directory_path: String = ""
 var current_file_path: String = "None"
 
 var timer_theme_path: String = ""
+
+# DO NOT SERIALIZE THIS
 var theme: TimerTheme = null
 
 func round_off(val: float) -> String:
@@ -97,3 +99,61 @@ func reload_theme() -> void:
 			theme = new_theme
 	else:
 		theme = load("res://DefaultTheming/DefaultTimerTheme.tres")
+
+func save() -> void:
+	var settings := TimerSettingsSerializable.new()
+	
+	settings.rta = rta
+	settings.show_title = show_title
+	settings.show_splits = show_splits
+	settings.show_attempt_count = show_attempt_count
+	settings.show_finished_runs = show_finished_runs
+	settings.title_one_line = title_one_line
+	settings.shown_splits = shown_splits
+	settings.shown_upcoming_splits = shown_upcoming_splits
+	settings.last_split_pinned = last_split_pinned
+	settings.time_rounding = time_rounding
+	settings.active_comparison = active_comparison
+	settings.active_comp_idx = active_comp_idx
+	settings.working_directory_path = working_directory_path
+	settings.current_file_path = current_file_path
+	settings.timer_theme_path = timer_theme_path
+	
+	# Finally, we save hotkeys
+	settings.hotkeys_dict = MainTimer.get_hotkeys_dict()
+	
+	# Debug
+	#print("Saving!")
+	#for property in settings.get_property_list():
+			#print(property["name"] + ": " + str(settings.get(property["name"])))
+	
+	ResourceSaver.save(settings, "user://deadsplit_settings.tres")
+
+func try_load() -> void:
+	if ResourceLoader.exists("user://deadsplit_settings.tres", "TimerSettingsSerializable"):
+		var settings = ResourceLoader.load("user://deadsplit_settings.tres")
+		
+		# Debug
+		#print("Loading!")
+		#for property in settings.get_property_list():
+			#print(property["name"] + ": " + str(settings.get(property["name"])))
+		
+		rta = settings.rta 
+		show_title = settings.show_title 
+		show_splits = settings.show_splits
+		show_attempt_count = settings.show_attempt_count
+		show_finished_runs = settings.show_finished_runs
+		title_one_line = settings.title_one_line
+		shown_splits = settings.shown_splits
+		shown_upcoming_splits = settings.shown_upcoming_splits
+		last_split_pinned = settings.last_split_pinned
+		time_rounding = settings.time_rounding
+		active_comparison = settings.active_comparison
+		active_comp_idx = settings.active_comp_idx
+		working_directory_path = settings.working_directory_path
+		current_file_path = settings.current_file_path
+		timer_theme_path = settings.timer_theme_path
+		
+		# Load hotkeys
+		for k in settings.hotkeys_dict:
+			MainTimer.add_hotkey(settings.hotkeys_dict[k], k)

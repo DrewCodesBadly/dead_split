@@ -265,6 +265,17 @@ impl DeadSplitTimer {
             .unwrap_or(String::from("None"))
     }
 
+    #[func]
+    fn get_hotkeys_dict(&self) -> Dictionary {
+        let mut dict = Dictionary::new();
+
+        for (k, v) in &self.hotkeys {
+            dict.set(*k, v.into_string());
+        }
+
+        dict
+    }
+
     #[signal]
     pub fn hotkey_pressed(&mut self, hotkey_id: i32) {}
 }
