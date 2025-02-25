@@ -8,5 +8,5 @@ crate-type = ["cdylib"]
 
 [dependencies]
 global-hotkey = "0.6.3"
-livesplit-core = "0.13.0"
+livesplit-core = {version = "0.13.0", features = ["auto-splitting"]}
 godot = "0.2.3"

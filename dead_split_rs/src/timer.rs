@@ -24,82 +24,94 @@ mod autosplitters;
 impl DeadSplitTimer {
     // Timer control
     #[func]
-    fn new_run(&mut self) {
-        let _ = self.timer.replace_run(get_default_run(), true);
+    fn new_run(&self) {
+        let mut binding = timer_write(&self.timer);
+        let _ = binding.replace_run(get_default_run(), true);
     }
 
     #[func]
-    fn start_split(&mut self) {
-        self.timer.split_or_start();
+    fn start_split(&self) {
+        let mut binding = timer_write(&self.timer);
+        binding.split_or_start();
     }
 
     #[func]
-    fn reset(&mut self) {
-        let current_split_index = self.timer.current_split_index().unwrap_or_default();
-        self.timer.reset(true);
-        let mut run = self.timer.run().clone();
+    fn reset(&self) {
+        let mut binding = timer_write(&self.timer);
+        let current_split_index = binding.current_split_index().unwrap_or_default();
+        binding.reset(true);
+        let mut run = binding.run().clone();
         run.update_segment_history(current_split_index);
         run.fix_splits();
-        let _ = self.timer.replace_run(run, true); // WHY WOULD YOU MAKE THIS A RESULT ISTG
+        let _ = binding.replace_run(run, true); // WHY WOULD YOU MAKE THIS A RESULT ISTG
     }
 
     #[func]
-    fn pause(&mut self) {
-        self.timer.pause();
+    fn pause(&self) {
+        let mut binding = timer_write(&self.timer);
+        binding.pause();
     }
 
     #[func]
-    fn resume(&mut self) {
-        self.timer.resume();
+    fn resume(&self) {
+        let mut binding = timer_write(&self.timer);
+        binding.resume();
     }
 
     #[func]
-    fn toggle_pause(&mut self) {
-        self.timer.toggle_pause();
+    fn toggle_pause(&self) {
+        let mut binding = timer_write(&self.timer);
+        binding.toggle_pause();
     }
 
     #[func]
-    fn undo_all_pauses(&mut self) {
-        self.timer.undo_all_pauses();
+    fn undo_all_pauses(&self) {
+        let mut binding = timer_write(&self.timer);
+        binding.undo_all_pauses();
     }
 
     #[func]
-    fn skip_split(&mut self) {
-        self.timer.skip_split();
+    fn skip_split(&self) {
+        let mut binding = timer_write(&self.timer);
+        binding.skip_split();
     }
 
     #[func]
-    fn undo_split(&mut self) {
-        self.timer.undo_split();
+    fn undo_split(&self) {
+        let mut binding = timer_write(&self.timer);
+        binding.undo_split();
     }
 
     #[func]
-    fn toggle_timing_method(&mut self) {
-        self.timer.toggle_timing_method();
+    fn toggle_timing_method(&self) {
+        let mut binding = timer_write(&self.timer);
+        binding.toggle_timing_method();
     }
 
     #[func]
     fn try_save_run(&self, file_path: String) -> bool {
+        let binding = timer_read(&self.timer);
         let writer = match File::create(file_path) {
             Ok(f) => BufWriter::new(f),
             Err(_) => return false,
         };
 
-        match livesplit::save_run(self.timer.run(), IoWrite(writer)) {
+        match livesplit::save_run(binding.run(), IoWrite(writer)) {
             Ok(_) => true,
             Err(_) => false,
         }
     }
 
     #[func]
-    fn try_load_run(&mut self, file_path: String) -> bool {
+    fn try_load_run(&self, file_path: String) -> bool {
+        let mut binding = timer_write(&self.timer);
         let path = Path::new(&file_path);
         let file = match fs::read(path) {
             Ok(f) => f,
             Err(_) => return false,
         };
 
-        let _ = self.timer.replace_run(
+        let _ = binding.replace_run(
             match composite::parse(&file, Some(path)) {
                 Ok(p) => p.run,
                 Err(_) => return false,
@@ -110,32 +122,36 @@ impl DeadSplitTimer {
     }
 
     #[func]
-    fn init_game_time(&mut self) {
-        self.timer.initialize_game_time();
+    fn init_game_time(&self) {
+        let mut binding = timer_write(&self.timer);
+        binding.initialize_game_time();
     }
 
     #[func]
-    fn regenerate_comparisons(&mut self) {
-        let mut new_run = self.timer.run().clone();
+    fn regenerate_comparisons(&self) {
+        let mut binding = timer_write(&self.timer);
+        let mut new_run = binding.run().clone();
         new_run.regenerate_comparisons();
-        let _ = self.timer.set_run(new_run);
+        let _ = binding.set_run(new_run);
     }
 
     // Get timer data
     #[func]
     fn get_segment_count(&self) -> i32 {
-        self.timer.run().len() as i32
+        let binding = timer_read(&self.timer);
+        binding.run().len() as i32
     }
 
     #[func]
     fn get_segment_name(&self, idx: i32) -> String {
-        self.timer.run().segment(idx as usize).name().to_owned()
+        let binding = timer_read(&self.timer);
+        binding.run().segment(idx as usize).name().to_owned()
     }
 
     #[func]
     fn get_segment_comparison(&self, idx: i32, comparing_to: String, rta: bool) -> f64 {
-        let comp = self
-            .timer
+        let binding = timer_read(&self.timer);
+        let comp = binding
             .run()
             .segment(idx as usize)
             .comparison(&comparing_to);
@@ -148,7 +164,8 @@ impl DeadSplitTimer {
 
     #[func]
     fn get_segment_time(&self, idx: i32, rta: bool) -> f64 {
-        let split_time = self.timer.run().segment(idx as usize).split_time();
+        let binding = timer_read(&self.timer);
+        let split_time = binding.run().segment(idx as usize).split_time();
         if rta {
             split_time.real_time.unwrap_or_default().total_seconds()
         } else {
@@ -158,8 +175,8 @@ impl DeadSplitTimer {
 
     #[func]
     fn get_pb_segment_time(&self, idx: i32, rta: bool) -> f64 {
-        let split_time = self
-            .timer
+        let binding = timer_read(&self.timer);
+        let split_time = binding
             .run()
             .segment(idx as usize)
             .personal_best_split_time();
@@ -172,7 +189,8 @@ impl DeadSplitTimer {
 
     #[func]
     fn get_segment_best(&self, idx: i32, rta: bool) -> f64 {
-        let best_time = self.timer.run().segment(idx as usize).best_segment_time();
+        let binding = timer_read(&self.timer);
+        let best_time = binding.run().segment(idx as usize).best_segment_time();
         if rta {
             best_time.real_time.unwrap_or_default().total_seconds()
         } else {
@@ -182,28 +200,33 @@ impl DeadSplitTimer {
 
     #[func]
     fn get_total_playtime(&self) -> f64 {
-        self.timer.run().total_playtime().total_seconds()
+        let binding = timer_read(&self.timer);
+        binding.run().total_playtime().total_seconds()
     }
 
     #[func]
     fn get_game_name(&self) -> String {
-        self.timer.run().game_name().to_owned()
+        let binding = timer_read(&self.timer);
+        binding.run().game_name().to_owned()
     }
 
     #[func]
     fn get_category_name(&self) -> String {
-        self.timer.run().category_name().to_owned()
+        let binding = timer_read(&self.timer);
+        binding.run().category_name().to_owned()
     }
 
     #[func]
     fn get_attempt_count(&self) -> i32 {
-        self.timer.run().attempt_count() as i32
+        let binding = timer_read(&self.timer);
+        binding.run().attempt_count() as i32
     }
 
     #[func]
     fn get_finished_run_count(&self) -> i32 {
+        let binding = timer_read(&self.timer);
         let mut count: i32 = 0;
-        for attempt in self.timer.run().attempt_history() {
+        for attempt in binding.run().attempt_history() {
             if let Some(_) = attempt.time().real_time {
                 count += 1;
             }
@@ -214,17 +237,20 @@ impl DeadSplitTimer {
     // run interfacing
     #[func]
     fn update_run(&mut self, editable_run: Gd<EditableRun>) {
-        let _ = self.timer.replace_run(editable_run.bind().get_run(), true);
+        let mut binding = timer_write(&self.timer);
+        let _ = binding.replace_run(editable_run.bind().get_run(), true);
     }
 
     #[func]
     fn get_editable_run(&self) -> Gd<EditableRun> {
-        EditableRun::from_run(self.timer.run())
+        let binding = timer_read(&self.timer);
+        EditableRun::from_run(binding.run())
     }
 
     #[func]
     fn get_comparisons(&self) -> Array<GString> {
-        Array::from_iter(self.timer.run().comparisons().map(|s| GString::from(s)))
+        let binding = timer_read(&self.timer);
+        Array::from_iter(binding.run().comparisons().map(|s| GString::from(s)))
     }
 
     // hotkeys
