@@ -19,10 +19,16 @@ func _ready() -> void:
 
 func _on_close_requested() -> void:
 	# Save settings!
+	TimerSettings.reload_theme()
 	TimerSettings.save()
 	timer_window.update_settings()
 	timer_window.settings_open = false
 	MainTimer.run_changed.emit() # just assume run updated, it's easier than actually checking
+	
+	if TimerSettings.autosplitter_path != "" and TimerSettings.autosplitter_path.is_absolute_path():
+		MainTimer.unload_autosplitter()
+		MainTimer.load_autosplitter(TimerSettings.autosplitter_path)
+	
 	queue_free()
 
 func _on_submenus_item_clicked(index: int, _at_position: Vector2, _mouse_button_index: int) -> void:
@@ -43,9 +49,6 @@ func _on_back_button_pressed() -> void:
 
 func _on_save_button_pressed() -> void:
 	pass # Replace with function body.
-
-func timer_load_file() -> bool:
-	return MainTimer.try_load_run(TimerSettings.current_file_path)
 
 func _on_use_igt_toggle_toggled(toggled_on: bool) -> void:
 	TimerSettings.rta = !toggled_on

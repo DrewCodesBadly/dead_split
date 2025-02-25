@@ -1,7 +1,7 @@
 use std::{
     fs::{self, File},
     io::BufWriter,
-    path::Path,
+    path::{Path, PathBuf},
     str::FromStr,
 };
 
@@ -16,8 +16,6 @@ use livesplit_core::{
 };
 
 use super::*;
-
-mod autosplitters;
 
 // impl block for basic livesplit-core interface exposed to godot
 #[godot_api]
@@ -304,4 +302,23 @@ impl DeadSplitTimer {
 
     #[signal]
     pub fn hotkey_pressed(&mut self, hotkey_id: i32) {}
+
+    // Interact with autosplitter runtime
+    // it cannot possibly be this easy
+    #[func]
+    pub fn load_autosplitter(&mut self, script_path: String) -> bool {
+        let path = match PathBuf::from_str(&script_path) {
+            Ok(p) => p,
+            Err(_) => return false,
+        };
+        match self.runtime.load_script_blocking(path) {
+            Ok(_) => true,
+            Err(_) => false,
+        }
+    }
+
+    #[func]
+    pub fn unload_autosplitter(&mut self) {
+        let _ = self.runtime.unload_script(); // not worried about this result
+    }
 }

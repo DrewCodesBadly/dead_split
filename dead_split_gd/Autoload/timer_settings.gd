@@ -29,6 +29,7 @@ var active_comp_idx: int = 0
 
 var working_directory_path: String = ""
 var current_file_path: String = "None"
+var autosplitter_path: String = ""
 
 var timer_theme_path: String = ""
 

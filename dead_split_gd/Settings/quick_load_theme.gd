@@ -7,7 +7,6 @@ extends ScrollContainer
 
 func _on_item_list_item_clicked(index: int, _at_position: Vector2, _mouse_button_index: int) -> void:
 	TimerSettings.timer_theme_path = TimerSettings.working_directory_path + "/" + file_list.get_item_text(index)
-	window.timer_window.reload_theme()
 	window._on_close_requested()
 
 func _on_visibility_changed() -> void:
