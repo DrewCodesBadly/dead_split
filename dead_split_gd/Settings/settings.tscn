@@ -19,7 +19,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cfss5"]
 
-[node name="Settings" type="Window" node_paths=PackedStringArray("submenus", "menus_container", "outer_toggle", "menu_toggle")]
+[node name="Settings" type="Window" node_paths=PackedStringArray("submenus", "menus_container", "outer_toggle", "menu_toggle", "igt_toggle")]
 title = "DeadSplit Settings"
 initial_position = 4
 size = Vector2i(1000, 1000)
@@ -29,6 +29,7 @@ menus_container = NodePath("MenuToggle/MenusContainer")
 outer_toggle = NodePath("VBoxContainer")
 menu_toggle = NodePath("MenuToggle")
 quit_index = 9
+igt_toggle = NodePath("VBoxContainer/UseIGTToggle")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 visible = false
@@ -89,7 +90,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="QuickLoad" type="ScrollContainer" parent="MenuToggle/MenusContainer"]
+[node name="QuickLoad" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("no_dir_label", "file_list", "window")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -98,6 +99,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_amw4c")
+no_dir_label = NodePath("VBoxContainer/NoDirectoryLabel")
+file_list = NodePath("VBoxContainer/FileList")
+window = NodePath("../../..")
+file_ending = ".lss"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MenuToggle/MenusContainer/QuickLoad"]
 layout_mode = 2
@@ -115,7 +120,7 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_cfss5")
 
-[node name="QuickLoadTheme" type="ScrollContainer" parent="MenuToggle/MenusContainer"]
+[node name="QuickLoadTheme" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("no_dir_label", "file_list", "window")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -124,6 +129,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_wf7lo")
+no_dir_label = NodePath("VBoxContainer/NoDirectoryLabel")
+file_list = NodePath("VBoxContainer/FileList")
+window = NodePath("../../..")
+file_ending = ".zip"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MenuToggle/MenusContainer/QuickLoadTheme"]
 layout_mode = 2
@@ -390,7 +399,7 @@ text = "Add New Segment"
 layout_mode = 2
 text = "Save run changes"
 
-[node name="Autosplitters" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("load_button", "autosplit_picker")]
+[node name="Autosplitters" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("load_button", "load_label", "autosplit_picker")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -398,8 +407,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+horizontal_scroll_mode = 4
 script = ExtResource("10_wf7lo")
 load_button = NodePath("VBoxContainer/GridContainer/LoadButton")
+load_label = NodePath("VBoxContainer/GridContainer/Label")
 autosplit_picker = NodePath("AutosplitPicker")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MenuToggle/MenusContainer/Autosplitters"]
@@ -649,6 +660,7 @@ use_native_dialog = true
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="item_clicked" from="VBoxContainer/Submenus" to="." method="_on_submenus_item_clicked"]
 [connection signal="toggled" from="VBoxContainer/UseIGTToggle" to="." method="_on_use_igt_toggle_toggled"]
+[connection signal="visibility_changed" from="VBoxContainer/UseIGTToggle" to="." method="_on_use_igt_toggle_visibility_changed"]
 [connection signal="pressed" from="MenuToggle/MenuBar/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="visibility_changed" from="MenuToggle/MenusContainer/QuickLoad" to="MenuToggle/MenusContainer/QuickLoad" method="_on_visibility_changed"]
 [connection signal="item_clicked" from="MenuToggle/MenusContainer/QuickLoad/VBoxContainer/FileList" to="MenuToggle/MenusContainer/QuickLoad" method="_on_item_list_item_clicked"]
@@ -675,6 +687,7 @@ use_native_dialog = true
 [connection signal="toggled" from="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/GridContainer/IGTSwitch" to="MenuToggle/MenusContainer/RunEdit" method="_on_igt_switch_toggled"]
 [connection signal="pressed" from="MenuToggle/MenusContainer/RunEdit/ScrollContainer/VBoxContainer/SplitContainer/AddSeg" to="MenuToggle/MenusContainer/RunEdit" method="_on_add_seg_pressed"]
 [connection signal="pressed" from="MenuToggle/MenusContainer/RunEdit/SaveButton" to="MenuToggle/MenusContainer/RunEdit" method="_on_save_button_pressed"]
+[connection signal="visibility_changed" from="MenuToggle/MenusContainer/Autosplitters" to="MenuToggle/MenusContainer/Autosplitters" method="_on_visibility_changed"]
 [connection signal="pressed" from="MenuToggle/MenusContainer/Autosplitters/VBoxContainer/GridContainer/LoadButton" to="MenuToggle/MenusContainer/Autosplitters" method="_on_load_button_pressed"]
 [connection signal="canceled" from="MenuToggle/MenusContainer/Autosplitters/AutosplitPicker" to="MenuToggle/MenusContainer/Autosplitters" method="_on_autosplit_picker_canceled"]
 [connection signal="file_selected" from="MenuToggle/MenusContainer/Autosplitters/AutosplitPicker" to="MenuToggle/MenusContainer/Autosplitters" method="_on_autosplit_picker_file_selected"]

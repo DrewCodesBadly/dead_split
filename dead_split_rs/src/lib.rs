@@ -32,7 +32,7 @@ pub struct DeadSplitTimer {
     hotkey_mgr: GlobalHotKeyManager,
     hotkey_binds: HashMap<u32, i32>,
     hotkeys: HashMap<i32, HotKey>,
-    runtime: Runtime,
+    runtime: Runtime<SharedTimer>,
 
     base: Base<Node>,
 }
@@ -60,7 +60,7 @@ impl INode for DeadSplitTimer {
             hotkey_mgr: GlobalHotKeyManager::new().expect("couldn't create hotkey manager"),
             hotkey_binds: HashMap::new(),
             hotkeys: HashMap::new(),
-            runtime: Runtime::new(timer_shared),
+            runtime: Runtime::new(),
             base,
         }
     }

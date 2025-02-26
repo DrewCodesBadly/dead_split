@@ -30,14 +30,14 @@ impl DeadSplitTimer {
     #[func]
     fn start_split(&self) {
         let mut binding = timer_write(&self.timer);
-        binding.split_or_start();
+        let _ = binding.split_or_start();
     }
 
     #[func]
     fn reset(&self) {
         let mut binding = timer_write(&self.timer);
         let current_split_index = binding.current_split_index().unwrap_or_default();
-        binding.reset(true);
+        let _ = binding.reset(true);
         let mut run = binding.run().clone();
         run.update_segment_history(current_split_index);
         run.fix_splits();
@@ -47,37 +47,37 @@ impl DeadSplitTimer {
     #[func]
     fn pause(&self) {
         let mut binding = timer_write(&self.timer);
-        binding.pause();
+        let _ = binding.pause();
     }
 
     #[func]
     fn resume(&self) {
         let mut binding = timer_write(&self.timer);
-        binding.resume();
+        let _ = binding.resume();
     }
 
     #[func]
     fn toggle_pause(&self) {
         let mut binding = timer_write(&self.timer);
-        binding.toggle_pause();
+        let _ = binding.toggle_pause();
     }
 
     #[func]
     fn undo_all_pauses(&self) {
         let mut binding = timer_write(&self.timer);
-        binding.undo_all_pauses();
+        let _ = binding.undo_all_pauses();
     }
 
     #[func]
     fn skip_split(&self) {
         let mut binding = timer_write(&self.timer);
-        binding.skip_split();
+        let _ = binding.skip_split();
     }
 
     #[func]
     fn undo_split(&self) {
         let mut binding = timer_write(&self.timer);
-        binding.undo_split();
+        let _ = binding.undo_split();
     }
 
     #[func]
@@ -122,7 +122,7 @@ impl DeadSplitTimer {
     #[func]
     fn init_game_time(&self) {
         let mut binding = timer_write(&self.timer);
-        binding.initialize_game_time();
+        let _ = binding.initialize_game_time();
     }
 
     #[func]
@@ -307,18 +307,28 @@ impl DeadSplitTimer {
     // it cannot possibly be this easy
     #[func]
     pub fn load_autosplitter(&mut self, script_path: String) -> bool {
-        let path = match PathBuf::from_str(&script_path) {
-            Ok(p) => p,
-            Err(_) => return false,
-        };
-        match self.runtime.load_script_blocking(path) {
-            Ok(_) => true,
-            Err(_) => false,
-        }
+        // let path = match PathBuf::from_str(&script_path) {
+        //     Ok(p) => p,
+        //     Err(_) => return false,
+        // };
+        // match self.runtime.load_script_blocking(path) {
+        //     Ok(_) => true,
+        //     Err(_) => false,
+        // }
+
+        // Debug ver. (panic so I can see the error in godot)
+        self.runtime
+            .load(
+                PathBuf::from_str(&script_path).expect("failed get path"),
+                self.timer.clone(),
+            )
+            .expect("failed loading autosplitter");
+
+        true
     }
 
     #[func]
     pub fn unload_autosplitter(&mut self) {
-        let _ = self.runtime.unload_script(); // not worried about this result
+        let _ = self.runtime.unload(); // not worried about this result
     }
 }

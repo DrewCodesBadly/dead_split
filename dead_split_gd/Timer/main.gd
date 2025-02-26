@@ -59,6 +59,10 @@ func _ready() -> void:
 	update_settings()
 	reload_theme()
 	
+	if TimerSettings.autosplitter_path != "" and TimerSettings.autosplitter_path.is_absolute_path():
+		MainTimer.load_autosplitter(TimerSettings.autosplitter_path)
+		MainTimer.init_game_time()
+	
 	MainTimer.comparison_changed.connect(comp_changed)
 	
 	MainTimer.run_changed.emit()

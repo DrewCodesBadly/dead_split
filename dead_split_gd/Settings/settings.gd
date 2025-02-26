@@ -5,6 +5,7 @@ extends Window
 @export var outer_toggle: Control
 @export var menu_toggle: Control
 @export var quit_index: int
+@export var igt_toggle: CheckButton
 
 var timer_window: Control
 var current_menu: Control
@@ -27,7 +28,8 @@ func _on_close_requested() -> void:
 	
 	if TimerSettings.autosplitter_path != "" and TimerSettings.autosplitter_path.is_absolute_path():
 		MainTimer.unload_autosplitter()
-		MainTimer.load_autosplitter(TimerSettings.autosplitter_path)
+		print(MainTimer.load_autosplitter(TimerSettings.autosplitter_path))
+		MainTimer.init_game_time()
 	
 	queue_free()
 
@@ -52,3 +54,8 @@ func _on_save_button_pressed() -> void:
 
 func _on_use_igt_toggle_toggled(toggled_on: bool) -> void:
 	TimerSettings.rta = !toggled_on
+
+
+func _on_use_igt_toggle_visibility_changed() -> void:
+	if igt_toggle.visible:
+		igt_toggle.button_pressed = !TimerSettings.rta
