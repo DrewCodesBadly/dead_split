@@ -20,7 +20,7 @@ class_name TimerSettingsSerializable
 
 @export var working_directory_path: String = ""
 @export var current_file_path: String = "None"
-
+@export var autosplitter_path: String = ""
 @export var timer_theme_path: String = ""
 
 @export var hotkeys_dict: Dictionary

@@ -119,6 +119,7 @@ func save() -> void:
 	settings.working_directory_path = working_directory_path
 	settings.current_file_path = current_file_path
 	settings.timer_theme_path = timer_theme_path
+	settings.autosplitter_path = autosplitter_path
 	
 	# Finally, we save hotkeys
 	settings.hotkeys_dict = MainTimer.get_hotkeys_dict()
@@ -154,6 +155,7 @@ func try_load() -> void:
 		working_directory_path = settings.working_directory_path
 		current_file_path = settings.current_file_path
 		timer_theme_path = settings.timer_theme_path
+		autosplitter_path = settings.autosplitter_path
 		
 		# Load hotkeys
 		for k in settings.hotkeys_dict:
