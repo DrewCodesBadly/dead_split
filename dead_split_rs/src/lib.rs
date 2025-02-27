@@ -7,6 +7,7 @@ use global_hotkey::{hotkey::HotKey, GlobalHotKeyEvent, GlobalHotKeyManager, HotK
 use godot::prelude::*;
 use livesplit_core::{auto_splitting::Runtime, Run, Segment, SharedTimer, Timer};
 
+mod editable_autosplitter_settings;
 mod editable_run;
 mod timer;
 

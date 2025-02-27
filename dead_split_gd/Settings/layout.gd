@@ -7,6 +7,8 @@ extends ScrollContainer
 @export var pin_last_check_box: CheckBox
 @export var shown_splits_num: SpinBox
 @export var upcoming_splits_num: SpinBox
+@export var window_x_num: SpinBox
+@export var window_y_num: SpinBox
 
 func _on_visibility_changed() -> void:
 	if visible:
@@ -15,6 +17,8 @@ func _on_visibility_changed() -> void:
 		finished_runs_check_box.button_pressed = TimerSettings.show_finished_runs
 		show_splits_check_box.button_pressed = TimerSettings.show_splits
 		pin_last_check_box.button_pressed = TimerSettings.last_split_pinned
+		window_x_num.value = TimerSettings.window_size.x
+		window_y_num.value = TimerSettings.window_size.y
 
 func _on_title_check_box_toggled(toggled_on: bool) -> void:
 	TimerSettings.show_title = toggled_on
@@ -39,3 +43,11 @@ func _on_upcoming_splits_num_value_changed(value: float) -> void:
 
 func _on_one_line_check_box_toggled(toggled_on: bool) -> void:
 	TimerSettings.title_one_line = toggled_on
+
+func _on_win_size_x_value_changed(value: float) -> void:
+	TimerSettings.window_size.x = floori(value)
+	DisplayServer.window_set_size(TimerSettings.window_size, 0)
+
+func _on_win_size_y_value_changed(value: float) -> void:
+	TimerSettings.window_size.y = floori(value)
+	DisplayServer.window_set_size(TimerSettings.window_size, 0)

@@ -26,10 +26,7 @@ func _on_close_requested() -> void:
 	timer_window.settings_open = false
 	MainTimer.run_changed.emit() # just assume run updated, it's easier than actually checking
 	
-	if TimerSettings.autosplitter_path != "" and TimerSettings.autosplitter_path.is_absolute_path():
-		MainTimer.unload_autosplitter()
-		print(MainTimer.load_autosplitter(TimerSettings.autosplitter_path))
-		MainTimer.init_game_time()
+	TimerSettings.reload_autosplitter()
 	
 	queue_free()
 

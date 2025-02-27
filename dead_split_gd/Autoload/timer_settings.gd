@@ -30,8 +30,11 @@ var active_comp_idx: int = 0
 var working_directory_path: String = ""
 var current_file_path: String = "None"
 var autosplitter_path: String = ""
+var autosplitter_settings_dict: Dictionary = {}
 
 var timer_theme_path: String = ""
+
+var window_size: Vector2i = Vector2i(750, 750)
 
 # DO NOT SERIALIZE THIS
 var theme: TimerTheme = null
@@ -120,6 +123,8 @@ func save() -> void:
 	settings.current_file_path = current_file_path
 	settings.timer_theme_path = timer_theme_path
 	settings.autosplitter_path = autosplitter_path
+	settings.autosplitter_settings_dict = autosplitter_settings_dict
+	settings.window_size = window_size
 	
 	# Finally, we save hotkeys
 	settings.hotkeys_dict = MainTimer.get_hotkeys_dict()
@@ -156,7 +161,24 @@ func try_load() -> void:
 		current_file_path = settings.current_file_path
 		timer_theme_path = settings.timer_theme_path
 		autosplitter_path = settings.autosplitter_path
+		autosplitter_settings_dict = settings.autosplitter_settings_dict
+		window_size = settings.window_size
 		
 		# Load hotkeys
 		for k in settings.hotkeys_dict:
 			MainTimer.add_hotkey(settings.hotkeys_dict[k], k)
+
+func reload_autosplitter() -> void:
+	if autosplitter_path != "" and autosplitter_path.is_absolute_path():
+		MainTimer.unload_autosplitter()
+		if MainTimer.load_autosplitter(autosplitter_path):
+			MainTimer.init_game_time()
+			var settings := MainTimer.get_auto_splitter_settings()
+			settings.set_settings_from_dict(autosplitter_settings_dict)
+
+func get_autosplitter_settings() -> Dictionary:
+	var settings := MainTimer.get_auto_splitter_settings()
+	if settings:
+		return settings.get_settings()
+	
+	return {}

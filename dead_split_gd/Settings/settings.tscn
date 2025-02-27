@@ -436,8 +436,7 @@ access = 2
 filters = PackedStringArray("*.wasm")
 use_native_dialog = true
 
-[node name="Layout" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("title_check_box", "attempt_count_check_box", "finished_runs_check_box", "show_splits_check_box", "pin_last_check_box", "shown_splits_num", "upcoming_splits_num")]
-visible = false
+[node name="Layout" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("title_check_box", "attempt_count_check_box", "finished_runs_check_box", "show_splits_check_box", "pin_last_check_box", "shown_splits_num", "upcoming_splits_num", "window_x_num", "window_y_num")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -452,6 +451,8 @@ show_splits_check_box = NodePath("VBoxContainer/GridContainer/ShowSplitsCheckBox
 pin_last_check_box = NodePath("VBoxContainer/GridContainer/LastPinnedCheckBox")
 shown_splits_num = NodePath("VBoxContainer/GridContainer/ShownSplitsNum")
 upcoming_splits_num = NodePath("VBoxContainer/GridContainer/UpcomingSplitsNum")
+window_x_num = NodePath("VBoxContainer/GridContainer/WinSizeX")
+window_y_num = NodePath("VBoxContainer/GridContainer/WinSizeY")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MenuToggle/MenusContainer/Layout"]
 layout_mode = 2
@@ -525,6 +526,28 @@ layout_mode = 2
 text = "Upcoming Splits Shown"
 
 [node name="UpcomingSplitsNum" type="SpinBox" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+min_value = 1.0
+value = 1.0
+rounded = true
+allow_greater = true
+
+[node name="Label9" type="Label" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Window Size X"
+
+[node name="WinSizeX" type="SpinBox" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+min_value = 1.0
+value = 1.0
+rounded = true
+allow_greater = true
+
+[node name="Label10" type="Label" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Window Size Y"
+
+[node name="WinSizeY" type="SpinBox" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
 layout_mode = 2
 min_value = 1.0
 value = 1.0
@@ -700,6 +723,8 @@ use_native_dialog = true
 [connection signal="toggled" from="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer/LastPinnedCheckBox" to="MenuToggle/MenusContainer/Layout" method="_on_last_pinned_check_box_toggled"]
 [connection signal="value_changed" from="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer/ShownSplitsNum" to="MenuToggle/MenusContainer/Layout" method="_on_shown_splits_num_value_changed"]
 [connection signal="value_changed" from="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer/UpcomingSplitsNum" to="MenuToggle/MenusContainer/Layout" method="_on_upcoming_splits_num_value_changed"]
+[connection signal="value_changed" from="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer/WinSizeX" to="MenuToggle/MenusContainer/Layout" method="_on_win_size_x_value_changed"]
+[connection signal="value_changed" from="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer/WinSizeY" to="MenuToggle/MenusContainer/Layout" method="_on_win_size_y_value_changed"]
 [connection signal="visibility_changed" from="MenuToggle/MenusContainer/Hotkeys" to="MenuToggle/MenusContainer/Hotkeys" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="MenuToggle/MenusContainer/Theme" to="MenuToggle/MenusContainer/Theme" method="_on_visibility_changed"]
 [connection signal="pressed" from="MenuToggle/MenusContainer/Theme/VBoxContainer/LoadTheme" to="MenuToggle/MenusContainer/Theme" method="_on_load_theme_pressed"]
