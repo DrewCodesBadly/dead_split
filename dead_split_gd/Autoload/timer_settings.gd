@@ -175,6 +175,7 @@ func reload_autosplitter() -> void:
 			MainTimer.init_game_time()
 			var settings := MainTimer.get_auto_splitter_settings()
 			settings.set_settings_from_dict(autosplitter_settings_dict)
+			MainTimer.set_auto_splitter_settings(settings)
 
 func get_autosplitter_settings() -> Dictionary:
 	var settings := MainTimer.get_auto_splitter_settings()

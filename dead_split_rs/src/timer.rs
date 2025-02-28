@@ -5,9 +5,7 @@ use std::{
     str::FromStr,
 };
 
-use crate::{
-    editable_autosplitter_settings::EditableAutosplitterSettings, editable_run::EditableRun,
-};
+use crate::editable_run::EditableRun;
 use godot::prelude::*;
 use livesplit_core::{
     analysis::total_playtime::TotalPlaytime,
@@ -312,38 +310,24 @@ impl DeadSplitTimer {
             Ok(p) => p,
             Err(_) => return false,
         };
-        match self.runtime.load(path, self.timer.clone()) {
+        match self.runtime.load_autosplitter(path) {
             Ok(_) => true,
             Err(_) => false,
         }
-
-        // Debug ver. (panic so I can see the specific error in godot)
-        // self.runtime
-        //     .load(
-        //         PathBuf::from_str(&script_path).expect("failed get path"),
-        //         self.timer.clone(),
-        //     )
-        //     .expect("failed loading autosplitter");
-
-        // true
     }
 
     #[func]
     pub fn unload_autosplitter(&mut self) {
-        let _ = self.runtime.unload(); // not worried about this result
+        self.runtime.unload(); // not worried about this result
     }
 
     #[func]
-    pub fn get_auto_splitter_settings(&self) -> Option<Gd<EditableAutosplitterSettings>> {
-        // fix unwrap?
-        Some(EditableAutosplitterSettings::from_map(
-            &self.runtime.settings_map()?,
-        ))
+    pub fn get_auto_splitter_settings(&self) -> Dictionary {
+        self.runtime.get_settings_dict()
     }
 
     #[func]
-    pub fn set_auto_splitter_settings(&mut self, settings: Gd<EditableAutosplitterSettings>) {
-        self.runtime
-            .set_settings_map(settings.bind().get_map().clone());
+    pub fn set_auto_splitter_settings(&mut self, settings: Dictionary) {
+        let _ = self.runtime.set_settings(settings);
     }
 }

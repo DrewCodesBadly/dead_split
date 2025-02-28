@@ -3,11 +3,12 @@ use std::{
     sync::{RwLockReadGuard, RwLockWriteGuard},
 };
 
+use dead_asr::DeadASR;
 use global_hotkey::{hotkey::HotKey, GlobalHotKeyEvent, GlobalHotKeyManager, HotKeyState};
 use godot::prelude::*;
-use livesplit_core::{auto_splitting::Runtime, Run, Segment, SharedTimer, Timer};
+use livesplit_core::{Run, Segment, SharedTimer, Timer};
 
-mod editable_autosplitter_settings;
+mod dead_asr;
 mod editable_run;
 mod timer;
 
@@ -33,7 +34,7 @@ pub struct DeadSplitTimer {
     hotkey_mgr: GlobalHotKeyManager,
     hotkey_binds: HashMap<u32, i32>,
     hotkeys: HashMap<i32, HotKey>,
-    runtime: Runtime<SharedTimer>,
+    runtime: DeadASR,
 
     base: Base<Node>,
 }
@@ -61,7 +62,7 @@ impl INode for DeadSplitTimer {
             hotkey_mgr: GlobalHotKeyManager::new().expect("couldn't create hotkey manager"),
             hotkey_binds: HashMap::new(),
             hotkeys: HashMap::new(),
-            runtime: Runtime::new(),
+            runtime: DeadASR::new(timer_shared),
             base,
         }
     }
