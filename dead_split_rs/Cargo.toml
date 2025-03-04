@@ -10,4 +10,4 @@ crate-type = ["cdylib"]
 global-hotkey = "0.6.3"
 livesplit-core = "0.13.0"
 godot = "0.2.3"
-livesplit-auto-splitting = "0.1.0"
+livesplit-auto-splitting = {git = "https://github.com/LiveSplit/livesplit-core"}

@@ -238,25 +238,25 @@ async fn main() {
                                 }
                                 // East
                                 else if room_id.1 == Some(175)
-                                    && (room_id.0 < Some(172) && room_id.0 > Some(200))
+                                    && (room_id.0 < Some(172) || room_id.0 > Some(200))
                                 {
                                     split();
                                 }
                                 // North
                                 else if room_id.1 == Some(94)
-                                    && (room_id.0 < Some(93) && room_id.0 > Some(124))
+                                    && (room_id.0 < Some(93) || room_id.0 > Some(124))
                                 {
                                     split();
                                 }
                                 // West
                                 else if room_id.1 == Some(219)
-                                    && (room_id.0 < Some(218) && room_id.0 > Some(253))
+                                    && (room_id.0 < Some(218) || room_id.0 > Some(253))
                                 {
                                     split();
                                 }
                                 // South
                                 else if room_id.1 == Some(130)
-                                    && (room_id.0 < Some(128) && room_id.0 > Some(165))
+                                    && (room_id.0 < Some(128) || room_id.0 > Some(165))
                                 {
                                     split();
                                 }

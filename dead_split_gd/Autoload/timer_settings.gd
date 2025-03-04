@@ -171,15 +171,6 @@ func try_load() -> void:
 func reload_autosplitter() -> void:
 	if autosplitter_path != "" and autosplitter_path.is_absolute_path():
 		MainTimer.unload_autosplitter()
-		if MainTimer.load_autosplitter(autosplitter_path):
-			MainTimer.init_game_time()
-			var settings := MainTimer.get_auto_splitter_settings()
-			settings.set_settings_from_dict(autosplitter_settings_dict)
-			MainTimer.set_auto_splitter_settings(settings)
-
-func get_autosplitter_settings() -> Dictionary:
-	var settings := MainTimer.get_auto_splitter_settings()
-	if settings:
-		return settings.get_settings()
-	
-	return {}
+		# This method also reloads the autosplitter so we're fine
+		MainTimer.set_auto_splitter_settings(autosplitter_settings_dict)
+		autosplitter_settings_dict = MainTimer.get_auto_splitter_settings()

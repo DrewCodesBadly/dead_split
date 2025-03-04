@@ -310,7 +310,8 @@ impl DeadSplitTimer {
             Ok(p) => p,
             Err(_) => return false,
         };
-        match self.runtime.load_autosplitter(path) {
+        self.runtime.set_autosplitter_path(path);
+        match self.runtime.load_autosplitter(None) {
             Ok(_) => true,
             Err(_) => false,
         }
@@ -318,7 +319,7 @@ impl DeadSplitTimer {
 
     #[func]
     pub fn unload_autosplitter(&mut self) {
-        self.runtime.unload(); // not worried about this result
+        self.runtime.unload_autosplitter(); // not worried about this result
     }
 
     #[func]

@@ -37,13 +37,12 @@ func refresh() -> void:
 	for child in container.get_children():
 		child.queue_free()
 	
-	var settings := TimerSettings.get_autosplitter_settings()
-	print(settings)
-	for key in settings:
+	print(TimerSettings.autosplitter_settings_dict)
+	for key in TimerSettings.autosplitter_settings_dict:
 		var label := Label.new()
 		label.text = key
 		container.add_child(label)
-		var val = settings[key]
+		var val = TimerSettings.autosplitter_settings_dict[key]
 		match typeof(val):
 			
 			# Writes appropriate data to the dictionary in TimerSettings
