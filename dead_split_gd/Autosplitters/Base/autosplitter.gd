@@ -28,7 +28,6 @@ func update() -> void:
 	if MainTimer.has_valid_process():
 		process_update()
 	else:
-		print("No process")
 		MainTimer.try_attach_process(process_name)
 
 # Called every tick when there is a valid process handle. Override this to provide autosplitter functionality.

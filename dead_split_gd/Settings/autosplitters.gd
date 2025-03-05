@@ -55,11 +55,11 @@ func refresh() -> void:
 				var spin := SpinBox.new()
 				spin.value = val
 				spin.step = 1.0
-				spin.value_changed.connect(func(b: bool): TimerSettings.autosplitter_settings_dict[key] = b)
+				spin.value_changed.connect(func(b: bool): TimerSettings.autosplitter_settings_dict[key] = floori(b))
 				container.add_child(spin)
 			TYPE_FLOAT:
 				var spin := SpinBox.new()
 				spin.value = val
-				spin.step = 0.01
+				spin.step = 0.001
 				spin.value_changed.connect(func(b: bool): TimerSettings.autosplitter_settings_dict[key] = b)
 				container.add_child(spin)

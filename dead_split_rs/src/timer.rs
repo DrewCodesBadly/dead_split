@@ -328,6 +328,10 @@ impl DeadSplitTimer {
     // Autosplitter API
     #[func]
     pub fn try_attach_process(&mut self, process_name: String) {
+        // Don't use an empty string, since that's clearly a user error.
+        if process_name.len() < 1 {
+            return;
+        };
         self.system.refresh_processes_specifics(
             sysinfo::ProcessesToUpdate::All,
             true,
