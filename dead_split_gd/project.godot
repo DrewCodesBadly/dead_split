@@ -30,10 +30,13 @@ window/subwindows/embed_subwindows=false
 [file_customization]
 
 folder_colors={
-"res://Autoload/": "purple",
+"res://Autoload/": "red",
+"res://Autosplitters/": "orange",
 "res://DefaultTheming/": "yellow",
-"res://ThemeDumper/": "orange",
-"res://TimerElements/": "red"
+"res://Settings/": "green",
+"res://ThemeDumper/": "teal",
+"res://Timer/": "blue",
+"res://TimerElements/": "purple"
 }
 
 [input]

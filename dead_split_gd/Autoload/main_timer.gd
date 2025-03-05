@@ -4,12 +4,11 @@ extends DeadSplitTimer
 signal run_changed
 signal comparison_changed
 
+var autosplitter: Autosplitter = null
+
 func _ready() -> void:
 	new_run()
 	self.hotkey_pressed.connect(_hotkey_pressed)
-
-func _on_run_changed() -> void:
-	init_game_time() # not sure why I even have to do this manually so I'm slapping it here
 
 func _hotkey_pressed(hotkey_id: int) -> void:
 	match hotkey_id:
@@ -43,3 +42,7 @@ func _hotkey_pressed(hotkey_id: int) -> void:
 			var comp := comp_list[TimerSettings.active_comp_idx]
 			TimerSettings.active_comparison = comp
 			comparison_changed.emit(comp)
+
+func update_autosplitter() -> void:
+	if autosplitter:
+		autosplitter.update()

@@ -160,9 +160,9 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("5_tyw00")
 no_dir_label = NodePath("VBoxContainer/NoDirectoryLabel")
-file_list = NodePath("../QuickLoadTheme/VBoxContainer/FileList")
+file_list = NodePath("VBoxContainer/FileList")
 window = NodePath("../../..")
-file_ending = ".wasm"
+file_ending = ".gd"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MenuToggle/MenusContainer/QuickLoadAutosplit"]
 layout_mode = 2

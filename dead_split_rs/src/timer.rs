@@ -1,7 +1,9 @@
+use core::f64;
 use std::{
+    ffi::OsStr,
     fs::{self, File},
     io::BufWriter,
-    path::{Path, PathBuf},
+    path::Path,
     str::FromStr,
 };
 
@@ -14,6 +16,8 @@ use livesplit_core::{
         saver::livesplit::{self, IoWrite},
     },
 };
+
+use read_process_memory::*;
 
 use super::*;
 
@@ -123,6 +127,24 @@ impl DeadSplitTimer {
     fn init_game_time(&self) {
         let mut binding = timer_write(&self.timer);
         let _ = binding.initialize_game_time();
+    }
+
+    #[func]
+    fn deinit_game_time(&self) {
+        let mut binding = timer_write(&self.timer);
+        let _ = binding.deinitialize_game_time();
+    }
+
+    #[func]
+    fn is_game_time_initialized(&self) -> bool {
+        let binding = timer_read(&self.timer);
+        binding.is_game_time_initialized()
+    }
+
+    #[func]
+    fn is_game_time_running(&self) -> bool {
+        let binding = timer_read(&self.timer);
+        !binding.is_game_time_paused()
     }
 
     #[func]
@@ -303,31 +325,144 @@ impl DeadSplitTimer {
     #[signal]
     pub fn hotkey_pressed(&mut self, hotkey_id: i32) {}
 
-    // Interact with autosplitter runtime
+    // Autosplitter API
     #[func]
-    pub fn load_autosplitter(&mut self, script_path: String) -> bool {
-        let path = match PathBuf::from_str(&script_path) {
-            Ok(p) => p,
-            Err(_) => return false,
-        };
-        match self.runtime.load_autosplitter(path) {
-            Ok(_) => true,
-            Err(_) => false,
+    pub fn try_attach_process(&mut self, process_name: String) {
+        self.system.refresh_processes_specifics(
+            sysinfo::ProcessesToUpdate::All,
+            true,
+            ProcessRefreshKind::nothing().with_exe(sysinfo::UpdateKind::OnlyIfNotSet),
+        );
+        if let Some(p) = self
+            .system
+            .processes_by_name(OsStr::new(&process_name))
+            .next()
+        {
+            // bunch of garbage to get from sysinfo::Process to read_process_memory::ProcessHandle
+            // should work like 99% of the time, the results aren't a major concern but if it fails it just fails anyway
+            let pid = p.pid();
+            self.attached_process =
+                ProcessHandle::try_from(read_process_memory::Pid::from(pid.as_u32() as i32))
+                    .ok()
+                    .map(|h| ProcessData {
+                        handle: h,
+                        pid: pid,
+                    });
         }
     }
 
     #[func]
-    pub fn unload_autosplitter(&mut self) {
-        self.runtime.unload(); // not worried about this result
+    pub fn has_valid_process(&self) -> bool {
+        if let Some(d) = &self.attached_process {
+            self.system.process(d.pid).is_some()
+        } else {
+            false
+        }
     }
 
     #[func]
-    pub fn get_auto_splitter_settings(&self) -> Dictionary {
-        self.runtime.get_settings_dict()
+    pub fn read_pointer_path(
+        &self,
+        offsets: PackedInt64Array,
+        pointer_size_32: bool,
+        data_type: i32,
+    ) -> Variant {
+        if let Some(p) = &self.attached_process {
+            let mut iter = offsets.as_slice().iter();
+            if let Some(v) = iter.next() {
+                let mut ptr: usize = *v as usize;
+                if pointer_size_32 {
+                    let mut buf = [0 as u8; 4];
+                    // Read and add each offset
+                    for offset in iter {
+                        if p.handle.copy_address(ptr, &mut buf).is_err() {
+                            return Variant::nil();
+                        }
+                        ptr = i32::from_le_bytes(buf) as usize;
+                        ptr += *offset as usize;
+                    }
+                } else {
+                    let mut buf = [0 as u8; 8];
+                    // Read and add each offset
+                    for offset in iter {
+                        if p.handle.copy_address(ptr as usize, &mut buf).is_err() {
+                            return Variant::nil();
+                        }
+                        ptr = i64::from_le_bytes(buf) as usize;
+                        ptr += *offset as usize
+                    }
+                }
+                // Read the final value - data_type matches an enum declared in godot
+                match data_type {
+                    0 => {
+                        // i32
+                        let mut buf = [0 as u8; 4];
+                        if p.handle.copy_address(ptr as usize, &mut buf).is_err() {
+                            return Variant::nil();
+                        }
+                        return Variant::from(i32::from_le_bytes(buf));
+                    }
+                    1 => {
+                        // i64
+                        let mut buf = [0 as u8; 8];
+                        if p.handle.copy_address(ptr as usize, &mut buf).is_err() {
+                            return Variant::nil();
+                        }
+                        return Variant::from(i64::from_le_bytes(buf));
+                    }
+                    2 => {
+                        // u32
+                        let mut buf = [0 as u8; 4];
+                        if p.handle.copy_address(ptr as usize, &mut buf).is_err() {
+                            return Variant::nil();
+                        }
+                        return Variant::from(u32::from_le_bytes(buf));
+                    }
+                    3 => {
+                        // u64
+                        let mut buf = [0 as u8; 8];
+                        if p.handle.copy_address(ptr as usize, &mut buf).is_err() {
+                            return Variant::nil();
+                        }
+                        return Variant::from(u64::from_le_bytes(buf));
+                    }
+                    4 => {
+                        // f32
+                        let mut buf = [0 as u8; 4];
+                        if p.handle.copy_address(ptr as usize, &mut buf).is_err() {
+                            return Variant::nil();
+                        }
+                        return Variant::from(f32::from_le_bytes(buf));
+                    }
+                    5 => {
+                        // f64
+                        let mut buf = [0 as u8; 8];
+                        if p.handle.copy_address(ptr as usize, &mut buf).is_err() {
+                            return Variant::nil();
+                        }
+                        return Variant::from(f64::from_le_bytes(buf));
+                    }
+
+                    // invalid input
+                    _ => return Variant::nil(),
+                }
+            } else {
+                return Variant::nil();
+            }
+        }
+
+        todo!()
     }
 
     #[func]
-    pub fn set_auto_splitter_settings(&mut self, settings: Dictionary) {
-        let _ = self.runtime.set_settings(settings);
+    fn pause_game_time(&self) {
+        let mut binding = timer_write(&self.timer);
+        binding.pause_game_time();
+    }
+
+    #[func]
+    fn resume_game_time(&self) {
+        let mut binding = timer_write(&self.timer);
+        binding.resume_game_time();
     }
 }

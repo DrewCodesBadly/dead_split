@@ -10,4 +10,5 @@ crate-type = ["cdylib"]
 global-hotkey = "0.6.3"
 livesplit-core = "0.13.0"
 godot = "0.2.3"
-livesplit-auto-splitting = "0.1.0"
+read-process-memory = "0.1.6"
+sysinfo = "0.33.1"

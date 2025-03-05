@@ -65,6 +65,10 @@ func _ready() -> void:
 	MainTimer.comparison_changed.connect(comp_changed)
 	
 	MainTimer.run_changed.emit()
+	timer_phase_changed.connect(func(phase: TimerSettings.TimerPhase):
+		if phase == TimerSettings.TimerPhase.RUNNING:
+			MainTimer.init_game_time()
+	)
 
 func add_element(element: TimerElement) -> void:
 	element.root = self

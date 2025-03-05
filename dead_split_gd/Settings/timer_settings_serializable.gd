@@ -25,6 +25,6 @@ class_name TimerSettingsSerializable
 
 @export var hotkeys_dict: Dictionary
 
-@export var autosplitter_settings_dict: Dictionary = {}
+@export var autosplitter_settings_dict: Dictionary[String, Variant] = {}
 
 @export var window_size: Vector2i = Vector2i(750, 750)

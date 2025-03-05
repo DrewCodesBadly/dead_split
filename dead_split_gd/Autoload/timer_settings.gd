@@ -30,7 +30,7 @@ var active_comp_idx: int = 0
 var working_directory_path: String = ""
 var current_file_path: String = "None"
 var autosplitter_path: String = ""
-var autosplitter_settings_dict: Dictionary = {}
+var autosplitter_settings_dict: Dictionary[String, Variant] = {}
 
 var timer_theme_path: String = ""
 
@@ -169,17 +169,22 @@ func try_load() -> void:
 			MainTimer.add_hotkey(settings.hotkeys_dict[k], k)
 
 func reload_autosplitter() -> void:
-	if autosplitter_path != "" and autosplitter_path.is_absolute_path():
-		MainTimer.unload_autosplitter()
-		if MainTimer.load_autosplitter(autosplitter_path):
-			MainTimer.init_game_time()
-			var settings := MainTimer.get_auto_splitter_settings()
-			settings.set_settings_from_dict(autosplitter_settings_dict)
-			MainTimer.set_auto_splitter_settings(settings)
-
-func get_autosplitter_settings() -> Dictionary:
-	var settings := MainTimer.get_auto_splitter_settings()
-	if settings:
-		return settings.get_settings()
-	
-	return {}
+	if autosplitter_path == "" or !autosplitter_path.is_absolute_path(): return
+	var autosplitter := Autosplitter.new()
+	var script = ResourceLoader.load(autosplitter_path, "Script")
+	if script and autosplitter:
+		autosplitter.set_script(script)
+		MainTimer.autosplitter = autosplitter
+		autosplitter.setup()
+		
+		# Handle settings
+		for setting in autosplitter_settings_dict:
+			if autosplitter.settings.has(setting):
+				autosplitter.settings[setting] = autosplitter_settings_dict[setting]
+			else:
+				autosplitter_settings_dict.erase(setting)
+		for setting in autosplitter.settings:
+			if !autosplitter_settings_dict.has(setting):
+				autosplitter_settings_dict[setting] = autosplitter.settings[setting]
+		
+		autosplitter.read_settings()

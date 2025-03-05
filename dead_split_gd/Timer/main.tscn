@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://c480cr32lwlp7"]
+[gd_scene load_steps=7 format=3 uid="uid://c480cr32lwlp7"]
 
 [ext_resource type="Script" uid="uid://ccg33snygy0to" path="res://Timer/main.gd" id="1_0xm2m"]
 [ext_resource type="Theme" uid="uid://pl4cmod5bjc5" path="res://DefaultTheming/TimerTheme.tres" id="1_iuv7m"]
 [ext_resource type="LabelSettings" uid="uid://c265rwaelkvxi" path="res://DefaultTheming/TimerStopped.tres" id="3_4fwna"]
 [ext_resource type="StyleBox" uid="uid://kfvfxcxihf30" path="res://DefaultTheming/TimerBackgroundStyleBox.tres" id="3_mko0i"]
 [ext_resource type="Script" uid="uid://c72mtte05p31d" path="res://Timer/notification_popup.gd" id="5_vfm8o"]
+[ext_resource type="Script" uid="uid://csh4kejonfx4t" path="res://Autosplitters/Base/autosplitter_ticks.gd" id="6_3tduw"]
 
 [node name="TimerWindow" type="Control" node_paths=PackedStringArray("timer_elements", "timer_label", "notification_popup", "panel")]
 clip_contents = true
@@ -69,3 +70,6 @@ layout_mode = 2
 text = "Personal Best"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="AutosplitterTicks" type="Timer" parent="."]
+script = ExtResource("6_3tduw")

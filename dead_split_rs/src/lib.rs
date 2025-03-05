@@ -3,12 +3,12 @@ use std::{
     sync::{RwLockReadGuard, RwLockWriteGuard},
 };
 
-use dead_asr::DeadASR;
 use global_hotkey::{hotkey::HotKey, GlobalHotKeyEvent, GlobalHotKeyManager, HotKeyState};
 use godot::prelude::*;
 use livesplit_core::{Run, Segment, SharedTimer, Timer};
+use read_process_memory::ProcessHandle;
+use sysinfo::{Pid, ProcessRefreshKind, RefreshKind, System};
 
-mod dead_asr;
 mod editable_run;
 mod timer;
 
@@ -16,6 +16,12 @@ struct DeadSplitRust;
 
 #[gdextension]
 unsafe impl ExtensionLibrary for DeadSplitRust {}
+
+// Wrapper for sysinfo::Process and read_process_memory::ProcessHandle since we really need both or none
+pub struct ProcessData {
+    pub handle: ProcessHandle,
+    pub pid: Pid,
+}
 
 #[derive(GodotClass)]
 #[class(base = Node)]
@@ -34,7 +40,8 @@ pub struct DeadSplitTimer {
     hotkey_mgr: GlobalHotKeyManager,
     hotkey_binds: HashMap<u32, i32>,
     hotkeys: HashMap<i32, HotKey>,
-    runtime: DeadASR,
+    system: System,
+    attached_process: Option<ProcessData>,
 
     base: Base<Node>,
 }
@@ -62,7 +69,10 @@ impl INode for DeadSplitTimer {
             hotkey_mgr: GlobalHotKeyManager::new().expect("couldn't create hotkey manager"),
             hotkey_binds: HashMap::new(),
             hotkeys: HashMap::new(),
-            runtime: DeadASR::new(timer_shared),
+            system: System::new_with_specifics(RefreshKind::nothing().with_processes(
+                ProcessRefreshKind::nothing().with_exe(sysinfo::UpdateKind::OnlyIfNotSet),
+            )),
+            attached_process: None,
             base,
         }
     }
