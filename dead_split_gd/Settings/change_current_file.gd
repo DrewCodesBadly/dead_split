@@ -22,7 +22,7 @@ func _on_run_file_chooser_file_selected(path: String) -> void:
 	file_label.text = "Current Splits File: " + path
 	disabled = false
 	text = "Open"
-	owner.timer_load_file()
+	MainTimer.try_load_run(TimerSettings.current_file_path)
 
 func _on_save_run_to_file_pressed() -> void:
 	var success := MainTimer.try_save_run(TimerSettings.current_file_path)

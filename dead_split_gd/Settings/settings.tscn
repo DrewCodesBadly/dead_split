@@ -1,12 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://cisd3sjrsl80g"]
+[gd_scene load_steps=15 format=3 uid="uid://cisd3sjrsl80g"]
 
 [ext_resource type="Script" uid="uid://dphvoc2b12tsf" path="res://Settings/settings.gd" id="1_cdu2u"]
 [ext_resource type="Theme" uid="uid://c5l3e3euemg0u" path="res://Settings/settings_theme.tres" id="2_qeycx"]
-[ext_resource type="Script" uid="uid://vg8tk301smwx" path="res://Settings/quick_load_run.gd" id="3_amw4c"]
+[ext_resource type="Script" uid="uid://vg8tk301smwx" path="res://Settings/quick_load.gd" id="3_amw4c"]
 [ext_resource type="Script" uid="uid://cu1bi3ks2s2pb" path="res://Settings/change_working_dir.gd" id="3_d3rbk"]
 [ext_resource type="LabelSettings" uid="uid://bqye7e4b32ngr" path="res://Settings/settings_warning_label_settings.tres" id="4_3pnvy"]
-[ext_resource type="Script" uid="uid://dfskck2wssrdj" path="res://Settings/quick_load_theme.gd" id="4_wf7lo"]
-[ext_resource type="Script" uid="uid://br0g1e7kmtak7" path="res://Settings/quick_load_autosplit.gd" id="5_tyw00"]
 [ext_resource type="Script" uid="uid://btim2tweu56gq" path="res://Settings/change_current_file.gd" id="5_v5vgm"]
 [ext_resource type="Script" uid="uid://ca7b66tmv6f0x" path="res://Settings/run_edit.gd" id="7_gppkp"]
 [ext_resource type="Script" uid="uid://b2xy0nqlexsc1" path="res://Settings/hotkeys.gd" id="7_jq5xg"]
@@ -28,7 +26,7 @@ submenus = NodePath("VBoxContainer/Submenus")
 menus_container = NodePath("MenuToggle/MenusContainer")
 outer_toggle = NodePath("VBoxContainer")
 menu_toggle = NodePath("MenuToggle")
-quit_index = 9
+quit_index = 7
 igt_toggle = NodePath("VBoxContainer/UseIGTToggle")
 save_profile_button = NodePath("VBoxContainer/SaveProfileButton")
 load_profile_button = NodePath("VBoxContainer/LoadProfileButton")
@@ -50,17 +48,15 @@ layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_qeycx")
 theme_override_styles/panel = SubResource("StyleBoxEmpty_qeycx")
-item_count = 10
-item_0/text = "Quick Load a Run"
-item_1/text = "Quick Load a Theme"
-item_2/text = "Quick Load Autosplitter"
-item_3/text = "Files"
-item_4/text = "Edit Splits"
-item_5/text = "Autosplitters"
-item_6/text = "Edit Layout"
-item_7/text = "Edit Hotkeys"
-item_8/text = "Theme"
-item_9/text = "Quit DeadSplit"
+item_count = 8
+item_0/text = "Quick Load"
+item_1/text = "Files"
+item_2/text = "Edit Splits"
+item_3/text = "Autosplitters"
+item_4/text = "Edit Layout"
+item_5/text = "Edit Hotkeys"
+item_6/text = "Theme"
+item_7/text = "Quit DeadSplit"
 
 [node name="UseIGTToggle" type="CheckButton" parent="VBoxContainer"]
 layout_mode = 2
@@ -102,8 +98,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="QuickLoad" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("no_dir_label", "file_list", "window")]
-visible = false
+[node name="QuickLoad" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("no_dir_label", "file_list", "window", "search")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -114,7 +109,8 @@ script = ExtResource("3_amw4c")
 no_dir_label = NodePath("VBoxContainer/NoDirectoryLabel")
 file_list = NodePath("VBoxContainer/FileList")
 window = NodePath("../../..")
-file_ending = ".lss"
+file_endings = Array[String]([".zip", ".gd", ".tres", ".lss"])
+search = NodePath("VBoxContainer/Search")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MenuToggle/MenusContainer/QuickLoad"]
 layout_mode = 2
@@ -127,67 +123,11 @@ layout_mode = 2
 text = "No DeadSplit directory set! Please set one in the Files options first."
 autowrap_mode = 2
 
+[node name="Search" type="LineEdit" parent="MenuToggle/MenusContainer/QuickLoad/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Search..."
+
 [node name="FileList" type="ItemList" parent="MenuToggle/MenusContainer/QuickLoad/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxEmpty_cfss5")
-
-[node name="QuickLoadTheme" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("no_dir_label", "file_list", "window")]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("4_wf7lo")
-no_dir_label = NodePath("VBoxContainer/NoDirectoryLabel")
-file_list = NodePath("VBoxContainer/FileList")
-window = NodePath("../../..")
-file_ending = ".zip"
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MenuToggle/MenusContainer/QuickLoadTheme"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="NoDirectoryLabel" type="Label" parent="MenuToggle/MenusContainer/QuickLoadTheme/VBoxContainer"]
-custom_minimum_size = Vector2(750, 0)
-layout_mode = 2
-text = "No DeadSplit directory set! Please set one in the Files options first."
-autowrap_mode = 2
-
-[node name="FileList" type="ItemList" parent="MenuToggle/MenusContainer/QuickLoadTheme/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxEmpty_cfss5")
-
-[node name="QuickLoadAutosplit" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("no_dir_label", "file_list", "window")]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("5_tyw00")
-no_dir_label = NodePath("VBoxContainer/NoDirectoryLabel")
-file_list = NodePath("VBoxContainer/FileList")
-window = NodePath("../../..")
-file_ending = ".gd"
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MenuToggle/MenusContainer/QuickLoadAutosplit"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="NoDirectoryLabel" type="Label" parent="MenuToggle/MenusContainer/QuickLoadAutosplit/VBoxContainer"]
-custom_minimum_size = Vector2(750, 0)
-layout_mode = 2
-text = "No DeadSplit directory set! Please set one in the Files options first."
-autowrap_mode = 2
-
-[node name="FileList" type="ItemList" parent="MenuToggle/MenusContainer/QuickLoadAutosplit/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_cfss5")
@@ -459,6 +399,7 @@ filters = PackedStringArray("*.wasm")
 use_native_dialog = true
 
 [node name="Layout" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("title_check_box", "attempt_count_check_box", "finished_runs_check_box", "show_splits_check_box", "pin_last_check_box", "shown_splits_num", "upcoming_splits_num", "window_x_num", "window_y_num")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -722,11 +663,9 @@ use_native_dialog = true
 [connection signal="pressed" from="VBoxContainer/LoadProfileButton" to="." method="_on_load_profile_button_pressed"]
 [connection signal="pressed" from="MenuToggle/MenuBar/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="visibility_changed" from="MenuToggle/MenusContainer/QuickLoad" to="MenuToggle/MenusContainer/QuickLoad" method="_on_visibility_changed"]
+[connection signal="text_changed" from="MenuToggle/MenusContainer/QuickLoad/VBoxContainer/Search" to="MenuToggle/MenusContainer/QuickLoad" method="_on_search_text_changed"]
+[connection signal="text_submitted" from="MenuToggle/MenusContainer/QuickLoad/VBoxContainer/Search" to="MenuToggle/MenusContainer/QuickLoad" method="_on_search_text_submitted"]
 [connection signal="item_clicked" from="MenuToggle/MenusContainer/QuickLoad/VBoxContainer/FileList" to="MenuToggle/MenusContainer/QuickLoad" method="_on_item_list_item_clicked"]
-[connection signal="visibility_changed" from="MenuToggle/MenusContainer/QuickLoadTheme" to="MenuToggle/MenusContainer/QuickLoadTheme" method="_on_visibility_changed"]
-[connection signal="item_clicked" from="MenuToggle/MenusContainer/QuickLoadTheme/VBoxContainer/FileList" to="MenuToggle/MenusContainer/QuickLoadTheme" method="_on_item_list_item_clicked"]
-[connection signal="visibility_changed" from="MenuToggle/MenusContainer/QuickLoadAutosplit" to="MenuToggle/MenusContainer/QuickLoadAutosplit" method="_on_visibility_changed"]
-[connection signal="item_clicked" from="MenuToggle/MenusContainer/QuickLoadAutosplit/VBoxContainer/FileList" to="MenuToggle/MenusContainer/QuickLoadAutosplit" method="_on_item_list_item_clicked"]
 [connection signal="pressed" from="MenuToggle/MenusContainer/Files/VBoxContainer/WorkingDir/ChangeWorkingDir" to="MenuToggle/MenusContainer/Files/VBoxContainer/WorkingDir/ChangeWorkingDir" method="_on_pressed"]
 [connection signal="pressed" from="MenuToggle/MenusContainer/Files/VBoxContainer/ActiveFile/ChangeCurrentFile" to="MenuToggle/MenusContainer/Files/VBoxContainer/ActiveFile/ChangeCurrentFile" method="_on_pressed"]
 [connection signal="pressed" from="MenuToggle/MenusContainer/Files/VBoxContainer/HBoxContainer/SaveRunToFile" to="MenuToggle/MenusContainer/Files/VBoxContainer/ActiveFile/ChangeCurrentFile" method="_on_save_run_to_file_pressed"]
