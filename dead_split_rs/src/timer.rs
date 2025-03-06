@@ -304,6 +304,19 @@ impl DeadSplitTimer {
     }
 
     #[func]
+    fn clear_hotkeys(&mut self) {
+        let _ = self.hotkey_mgr.unregister_all(
+            self.hotkeys
+                .values()
+                .map(|h| *h)
+                .collect::<Vec<HotKey>>()
+                .as_slice(),
+        );
+        self.hotkey_binds.clear();
+        self.hotkeys.clear();
+    }
+
+    #[func]
     fn get_hotkey_string(&self, hotkey_id: i32) -> String {
         self.hotkeys
             .get(&hotkey_id)

@@ -33,6 +33,7 @@ var autosplitter_path: String = ""
 var autosplitter_settings_dict: Dictionary[String, Variant] = {}
 
 var timer_theme_path: String = ""
+var settings_profile_path: String = ""
 
 var window_size: Vector2i = Vector2i(750, 750)
 
@@ -135,6 +136,8 @@ func save() -> void:
 			#print(property["name"] + ": " + str(settings.get(property["name"])))
 	
 	ResourceSaver.save(settings, "user://deadsplit_settings.tres")
+	if settings_profile_path != "" and settings_profile_path.is_absolute_path():
+		ResourceSaver.save(settings, settings_profile_path)
 
 func try_load() -> void:
 	if ResourceLoader.exists("user://deadsplit_settings.tres", "TimerSettingsSerializable"):
@@ -188,3 +191,31 @@ func reload_autosplitter() -> void:
 				autosplitter_settings_dict[setting] = autosplitter.settings[setting]
 		
 		autosplitter.read_settings()
+
+func load_profile(path: String) -> void:
+	if path != "" and path.is_absolute_path() and ResourceLoader.exists(path, "TimerSettingsSerializable"):
+		var settings = ResourceLoader.load("user://deadsplit_settings.tres")
+		
+		rta = settings.rta 
+		show_title = settings.show_title 
+		show_splits = settings.show_splits
+		show_attempt_count = settings.show_attempt_count
+		show_finished_runs = settings.show_finished_runs
+		title_one_line = settings.title_one_line
+		shown_splits = settings.shown_splits
+		shown_upcoming_splits = settings.shown_upcoming_splits
+		last_split_pinned = settings.last_split_pinned
+		time_rounding = settings.time_rounding
+		active_comparison = settings.active_comparison
+		active_comp_idx = settings.active_comp_idx
+		working_directory_path = settings.working_directory_path
+		current_file_path = settings.current_file_path
+		timer_theme_path = settings.timer_theme_path
+		autosplitter_path = settings.autosplitter_path
+		autosplitter_settings_dict = settings.autosplitter_settings_dict
+		window_size = settings.window_size
+		
+		# Load hotkeys
+		MainTimer.clear_hotkeys()
+		for k in settings.hotkeys_dict:
+			MainTimer.add_hotkey(settings.hotkeys_dict[k], k)

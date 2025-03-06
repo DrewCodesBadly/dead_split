@@ -19,7 +19,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cfss5"]
 
-[node name="Settings" type="Window" node_paths=PackedStringArray("submenus", "menus_container", "outer_toggle", "menu_toggle", "igt_toggle")]
+[node name="Settings" type="Window" node_paths=PackedStringArray("submenus", "menus_container", "outer_toggle", "menu_toggle", "igt_toggle", "save_profile_button", "load_profile_button", "profile_saver", "profile_loader")]
 title = "DeadSplit Settings"
 initial_position = 4
 size = Vector2i(1000, 1000)
@@ -30,6 +30,10 @@ outer_toggle = NodePath("VBoxContainer")
 menu_toggle = NodePath("MenuToggle")
 quit_index = 9
 igt_toggle = NodePath("VBoxContainer/UseIGTToggle")
+save_profile_button = NodePath("VBoxContainer/SaveProfileButton")
+load_profile_button = NodePath("VBoxContainer/LoadProfileButton")
+profile_saver = NodePath("ProfileSaver")
+profile_loader = NodePath("ProfileLoader")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 visible = false
@@ -61,6 +65,14 @@ item_9/text = "Quit DeadSplit"
 [node name="UseIGTToggle" type="CheckButton" parent="VBoxContainer"]
 layout_mode = 2
 text = "Use IGT"
+
+[node name="SaveProfileButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Save settings profile..."
+
+[node name="LoadProfileButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Load settings profile..."
 
 [node name="MenuToggle" type="VBoxContainer" parent="."]
 anchors_preset = 15
@@ -690,10 +702,24 @@ access = 2
 filters = PackedStringArray("*.zip")
 use_native_dialog = true
 
+[node name="ProfileSaver" type="FileDialog" parent="."]
+access = 2
+filters = PackedStringArray("*.tres")
+use_native_dialog = true
+
+[node name="ProfileLoader" type="FileDialog" parent="."]
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+filters = PackedStringArray("*.tres")
+use_native_dialog = true
+
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="item_clicked" from="VBoxContainer/Submenus" to="." method="_on_submenus_item_clicked"]
 [connection signal="toggled" from="VBoxContainer/UseIGTToggle" to="." method="_on_use_igt_toggle_toggled"]
 [connection signal="visibility_changed" from="VBoxContainer/UseIGTToggle" to="." method="_on_use_igt_toggle_visibility_changed"]
+[connection signal="pressed" from="VBoxContainer/SaveProfileButton" to="." method="_on_save_profile_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/LoadProfileButton" to="." method="_on_load_profile_button_pressed"]
 [connection signal="pressed" from="MenuToggle/MenuBar/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="visibility_changed" from="MenuToggle/MenusContainer/QuickLoad" to="MenuToggle/MenusContainer/QuickLoad" method="_on_visibility_changed"]
 [connection signal="item_clicked" from="MenuToggle/MenusContainer/QuickLoad/VBoxContainer/FileList" to="MenuToggle/MenusContainer/QuickLoad" method="_on_item_list_item_clicked"]
@@ -741,6 +767,10 @@ use_native_dialog = true
 [connection signal="pressed" from="MenuToggle/MenusContainer/Theme/VBoxContainer/ResetDefault" to="MenuToggle/MenusContainer/Theme" method="_on_reset_default_pressed"]
 [connection signal="canceled" from="MenuToggle/MenusContainer/Theme/ResourceChooser" to="MenuToggle/MenusContainer/Theme" method="_on_resource_chooser_canceled"]
 [connection signal="file_selected" from="MenuToggle/MenusContainer/Theme/ResourceChooser" to="MenuToggle/MenusContainer/Theme" method="_on_resource_chooser_file_selected"]
+[connection signal="canceled" from="ProfileSaver" to="." method="_on_profile_saver_canceled"]
+[connection signal="file_selected" from="ProfileSaver" to="." method="_on_profile_saver_file_selected"]
+[connection signal="canceled" from="ProfileLoader" to="." method="_on_profile_loader_canceled"]
+[connection signal="file_selected" from="ProfileLoader" to="." method="_on_profile_loader_file_selected"]
 
 [editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/StartSplit"]
 [editable path="MenuToggle/MenusContainer/Hotkeys/VBoxContainer/Reset"]

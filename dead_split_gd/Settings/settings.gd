@@ -7,6 +7,11 @@ extends Window
 @export var quit_index: int
 @export var igt_toggle: CheckButton
 
+@export var save_profile_button: Button
+@export var load_profile_button: Button
+@export var profile_saver: FileDialog
+@export var profile_loader: FileDialog
+
 var timer_window: Control
 var current_menu: Control
 
@@ -56,3 +61,33 @@ func _on_use_igt_toggle_toggled(toggled_on: bool) -> void:
 func _on_use_igt_toggle_visibility_changed() -> void:
 	if igt_toggle.visible:
 		igt_toggle.button_pressed = !TimerSettings.rta
+
+
+func _on_save_profile_button_pressed() -> void:
+	save_profile_button.text = "Waiting..."
+	save_profile_button.disabled = true
+	profile_saver.show()
+
+func _on_profile_saver_file_selected(path: String) -> void:
+	save_profile_button.text = "Save settings profile..."
+	save_profile_button.disabled = false
+	TimerSettings.settings_profile_path = path
+	TimerSettings.save()
+
+func _on_profile_saver_canceled() -> void:
+	save_profile_button.text = "Save settings profile..."
+	save_profile_button.disabled = false
+
+func _on_profile_loader_file_selected(path: String) -> void:
+	load_profile_button.text = "Load settings profile..."
+	load_profile_button.disabled = false
+	TimerSettings.load_profile(path)
+
+func _on_profile_loader_canceled() -> void:
+	load_profile_button.text = "Load settings profile..."
+	load_profile_button.disabled = false
+
+func _on_load_profile_button_pressed() -> void:
+	load_profile_button.disabled = true
+	load_profile_button.text = "Waiting..."
+	profile_loader.show()
