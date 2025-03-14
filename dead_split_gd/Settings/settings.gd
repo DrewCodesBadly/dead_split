@@ -4,13 +4,14 @@ extends Window
 @export var menus_container: Control
 @export var outer_toggle: Control
 @export var menu_toggle: Control
-@export var quit_index: int
 @export var igt_toggle: CheckButton
 
 @export var save_profile_button: Button
 @export var load_profile_button: Button
 @export var profile_saver: FileDialog
 @export var profile_loader: FileDialog
+
+@onready var quit_index := menus_container.get_child_count()
 
 var timer_window: Control
 var current_menu: Control

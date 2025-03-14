@@ -57,7 +57,7 @@ func _on_visibility_changed() -> void:
 func _on_search_text_changed(new_text: String) -> void:
 	file_list.clear()
 	for file in files:
-		if file.contains(new_text):
+		if file.to_lower().contains(new_text.to_lower()):
 			file_list.add_item(file)
 
 # Picks the first file from the list when you submit text into the serach bar

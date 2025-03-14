@@ -26,7 +26,6 @@ submenus = NodePath("VBoxContainer/Submenus")
 menus_container = NodePath("MenuToggle/MenusContainer")
 outer_toggle = NodePath("VBoxContainer")
 menu_toggle = NodePath("MenuToggle")
-quit_index = 7
 igt_toggle = NodePath("VBoxContainer/UseIGTToggle")
 save_profile_button = NodePath("VBoxContainer/SaveProfileButton")
 load_profile_button = NodePath("VBoxContainer/LoadProfileButton")

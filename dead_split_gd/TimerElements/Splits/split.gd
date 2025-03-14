@@ -17,17 +17,21 @@ func update() -> void:
 		comp_label.text = ""
 		comp_label.label_settings = null
 	else:
-		var t := MainTimer.current_time if TimerSettings.rta else MainTimer.current_game_time
-		var comp := MainTimer.get_segment_comparison(idx, TimerSettings.active_comparison, TimerSettings.rta)
-		var delta := t - comp
-		var string := ""
-		if delta >= 0.0:
-			string += "+"
-		string += str(TimerSettings.round_off(delta))
-		comp_label.text = string
-		
-		# handle label settings
-		if !current:
+		# Only update the comparison on splits that are finished or 
+		# currently running past the best segment
+		# It needs to still update for finished splits in case the active comparison changes
+		if !current or MainTimer.get_segment_best(idx, TimerSettings.rta) <= \
+		MainTimer.get_segment_time(idx, TimerSettings.rta):
+			var t := MainTimer.current_time if TimerSettings.rta else MainTimer.current_game_time
+			var comp := MainTimer.get_segment_comparison(idx, TimerSettings.active_comparison, TimerSettings.rta)
+			var delta := t - comp
+			var string := ""
+			if delta >= 0.0:
+				string += "+"
+			string += str(TimerSettings.round_off(delta))
+			comp_label.text = string
+			
+			# handle label settings
 			var last_delta := 0.0
 			if idx > 0:
 				last_delta = MainTimer.get_segment_comparison(idx - 1, TimerSettings.active_comparison, TimerSettings.rta)
@@ -36,8 +40,8 @@ func update() -> void:
 				comp_label.label_settings = TimerSettings.theme.split_ahead_gaining_label if delta < last_delta \
 				else TimerSettings.theme.split_ahead_losing_label
 			else:
-				comp_label.label_settings = TimerSettings.theme.split_behind_losing_label if delta > last_delta else \
-				TimerSettings.theme.split_behind_gaining_label
+				comp_label.label_settings = TimerSettings.theme.split_behind_losing_label if delta > last_delta \
+				else TimerSettings.theme.split_behind_gaining_label
 		else:
 			comp_label.label_settings = null
 	
