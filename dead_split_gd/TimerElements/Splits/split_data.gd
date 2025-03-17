@@ -15,5 +15,6 @@ func generate(_focus_index: int = -1, _shown_splits: int = 0, _shown_splits_afte
 	split.idx = index
 	split.set_split_name(split_name)
 	split.update()
+	split.get_child(0).get_child(2).custom_minimum_size.x = TimerSettings.split_separation
 	arr.append(split)
 	return arr

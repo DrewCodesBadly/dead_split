@@ -10,9 +10,11 @@ func run_updated() -> void:
 func update_text() -> void:
 	if TimerSettings.title_one_line:
 		game_name.text = MainTimer.get_game_name() + " - " + MainTimer.get_category_name()
+		cat_name.hide()
 	else:
 		game_name.text = MainTimer.get_game_name()
 		cat_name.text = MainTimer.get_category_name()
+		cat_name.show()
 	
 	attempts.visible = TimerSettings.show_attempt_count
 	if TimerSettings.show_finished_runs:

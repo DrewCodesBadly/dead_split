@@ -4,11 +4,13 @@ extends ScrollContainer
 @export var attempt_count_check_box: CheckBox
 @export var finished_runs_check_box: CheckBox
 @export var show_splits_check_box: CheckBox
+@export var one_line_check_box: CheckBox
 @export var pin_last_check_box: CheckBox
 @export var shown_splits_num: SpinBox
 @export var upcoming_splits_num: SpinBox
 @export var window_x_num: SpinBox
 @export var window_y_num: SpinBox
+@export var decimals_shown: SpinBox
 
 func _on_visibility_changed() -> void:
 	if visible:
@@ -16,9 +18,13 @@ func _on_visibility_changed() -> void:
 		attempt_count_check_box.button_pressed = TimerSettings.show_attempt_count
 		finished_runs_check_box.button_pressed = TimerSettings.show_finished_runs
 		show_splits_check_box.button_pressed = TimerSettings.show_splits
+		one_line_check_box.button_pressed = TimerSettings.title_one_line
 		pin_last_check_box.button_pressed = TimerSettings.last_split_pinned
 		window_x_num.value = TimerSettings.window_size.x
 		window_y_num.value = TimerSettings.window_size.y
+		upcoming_splits_num.value = TimerSettings.shown_upcoming_splits
+		shown_splits_num.value = TimerSettings.shown_splits
+		decimals_shown.value = TimerSettings.time_rounding
 
 func _on_title_check_box_toggled(toggled_on: bool) -> void:
 	TimerSettings.show_title = toggled_on
@@ -51,3 +57,6 @@ func _on_win_size_x_value_changed(value: float) -> void:
 func _on_win_size_y_value_changed(value: float) -> void:
 	TimerSettings.window_size.y = floori(value)
 	DisplayServer.window_set_size(TimerSettings.window_size, 0)
+
+func _on_decimal_prec_value_changed(value: float) -> void:
+	TimerSettings.time_rounding = floori(value)

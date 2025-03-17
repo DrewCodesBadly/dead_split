@@ -151,7 +151,12 @@ func timer_process() -> void:
 
 func timer_phase_change(phase: TimerSettings.TimerPhase) -> void:
 	if phase == TimerSettings.TimerPhase.NOT_RUNNING:
+		current_split = -1
 		split_focus = 0
+		update_splits()
+	elif phase == TimerSettings.TimerPhase.ENDED:
+		split_focus = MainTimer.get_segment_count() - 1
+		current_split = -1
 		update_splits()
 
 func update_settings() -> void:

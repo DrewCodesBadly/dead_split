@@ -22,7 +22,7 @@ var title_one_line := false
 var shown_splits := 10
 var shown_upcoming_splits := 1
 var last_split_pinned := true
-var time_rounding := 0.01
+var time_rounding := 2
 
 var active_comparison: String = "Personal Best"
 var active_comp_idx: int = 0
@@ -36,28 +36,38 @@ var timer_theme_path: String = ""
 var settings_profile_path: String = ""
 
 var window_size: Vector2i = Vector2i(750, 750)
+var split_separation := 50 #TODO: Add setting for this
 
 # DO NOT SERIALIZE THIS
 var theme: TimerTheme = null
 
+# Takes a val in seconds and turns it into hh:mm:ss.ss
 func round_off(val: float) -> String:
 	var out_string := ""
-	if val > 3600.0:
-		out_string += str(floori(val / 3600)) + ":"
-		if fmod(val, 3600) < 600.0:
-			out_string += "0"
-	if val > 60.0:
-		out_string += str(floori(val / 60) % 60) + ":"
-		if fmod(val, 60.0) < 10.0:
-			out_string += "0"
-	
-	var decimal: float = snapped(fmod(val, 60.0), time_rounding)
-	var decimal_str := str(decimal)
-	var expected_chars := str(time_rounding).length() + (1 if decimal < 0.0 else 0)
-	while decimal_str.length() < expected_chars:
-		decimal_str += "0"
-	out_string += decimal_str
-	
+	if val < 0.0:
+		out_string += "-"
+		val = abs(val)
+	# Hours
+	var hours := floori(val / 3600.0)
+	if hours > 0:
+		out_string += str(hours) + ":"
+	# Minutes
+	var minutes := floori(val / 60) % 60
+	var minutes_str := str(minutes) + ":"
+	while hours > 0 and minutes_str.length() < 3:
+		minutes_str = "0" + minutes_str
+	if minutes > 0:
+		out_string += minutes_str
+	# Seconds
+	var seconds_str := str(floori(val) % 60) + "."
+	while minutes > 0 and seconds_str.length() < 3:
+		seconds_str = "0" + seconds_str
+	out_string += seconds_str
+	# Decimals
+	var decimals_str = str(fmod(val, 1.0)).substr(2)
+	while decimals_str.length() < time_rounding:
+		decimals_str += "0"
+	out_string += decimals_str.substr(0, 2)
 	return out_string
 
 func round_off_no_decimal(val: float) -> String:

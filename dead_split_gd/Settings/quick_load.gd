@@ -35,8 +35,7 @@ func _on_visibility_changed() -> void:
 		file_list.clear()
 		files.clear()
 		
-		# Add everything in the working directory
-		# TODO: Make this recursive
+		# Add everything in the working directory (Recursive)
 		for file in dir.get_files():
 			for file_ending in file_endings:
 				if file.ends_with(file_ending):

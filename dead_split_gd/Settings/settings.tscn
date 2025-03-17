@@ -367,6 +367,7 @@ container = NodePath("VBoxContainer/GridContainer2")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MenuToggle/MenusContainer/Autosplitters"]
 layout_mode = 2
+size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="MenuToggle/MenusContainer/Autosplitters/VBoxContainer"]
 layout_mode = 2
@@ -397,8 +398,7 @@ access = 2
 filters = PackedStringArray("*.wasm")
 use_native_dialog = true
 
-[node name="Layout" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("title_check_box", "attempt_count_check_box", "finished_runs_check_box", "show_splits_check_box", "pin_last_check_box", "shown_splits_num", "upcoming_splits_num", "window_x_num", "window_y_num")]
-visible = false
+[node name="Layout" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("title_check_box", "attempt_count_check_box", "finished_runs_check_box", "show_splits_check_box", "one_line_check_box", "pin_last_check_box", "shown_splits_num", "upcoming_splits_num", "window_x_num", "window_y_num", "decimals_shown")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -410,11 +410,13 @@ title_check_box = NodePath("VBoxContainer/GridContainer/TitleCheckBox")
 attempt_count_check_box = NodePath("VBoxContainer/GridContainer/AttemptCountCheckBox")
 finished_runs_check_box = NodePath("VBoxContainer/GridContainer/FinishedRunsCheckBox")
 show_splits_check_box = NodePath("VBoxContainer/GridContainer/ShowSplitsCheckBox")
+one_line_check_box = NodePath("VBoxContainer/GridContainer/OneLineCheckBox")
 pin_last_check_box = NodePath("VBoxContainer/GridContainer/LastPinnedCheckBox")
 shown_splits_num = NodePath("VBoxContainer/GridContainer/ShownSplitsNum")
 upcoming_splits_num = NodePath("VBoxContainer/GridContainer/UpcomingSplitsNum")
 window_x_num = NodePath("VBoxContainer/GridContainer/WinSizeX")
 window_y_num = NodePath("VBoxContainer/GridContainer/WinSizeY")
+decimals_shown = NodePath("VBoxContainer/GridContainer/DecimalPrec")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MenuToggle/MenusContainer/Layout"]
 layout_mode = 2
@@ -515,6 +517,13 @@ min_value = 1.0
 value = 1.0
 rounded = true
 allow_greater = true
+
+[node name="Label11" type="Label" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Time Decimals Shown"
+
+[node name="DecimalPrec" type="SpinBox" parent="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer"]
+layout_mode = 2
 
 [node name="Hotkeys" type="ScrollContainer" parent="MenuToggle/MenusContainer" node_paths=PackedStringArray("window", "hotkeys_container")]
 visible = false
@@ -699,6 +708,7 @@ use_native_dialog = true
 [connection signal="value_changed" from="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer/UpcomingSplitsNum" to="MenuToggle/MenusContainer/Layout" method="_on_upcoming_splits_num_value_changed"]
 [connection signal="value_changed" from="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer/WinSizeX" to="MenuToggle/MenusContainer/Layout" method="_on_win_size_x_value_changed"]
 [connection signal="value_changed" from="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer/WinSizeY" to="MenuToggle/MenusContainer/Layout" method="_on_win_size_y_value_changed"]
+[connection signal="value_changed" from="MenuToggle/MenusContainer/Layout/VBoxContainer/GridContainer/DecimalPrec" to="MenuToggle/MenusContainer/Layout" method="_on_decimal_prec_value_changed"]
 [connection signal="visibility_changed" from="MenuToggle/MenusContainer/Hotkeys" to="MenuToggle/MenusContainer/Hotkeys" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="MenuToggle/MenusContainer/Theme" to="MenuToggle/MenusContainer/Theme" method="_on_visibility_changed"]
 [connection signal="pressed" from="MenuToggle/MenusContainer/Theme/VBoxContainer/LoadTheme" to="MenuToggle/MenusContainer/Theme" method="_on_load_theme_pressed"]

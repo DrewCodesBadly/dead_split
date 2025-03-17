@@ -68,6 +68,9 @@ func _ready() -> void:
 	timer_phase_changed.connect(func(phase: TimerSettings.TimerPhase):
 		if phase == TimerSettings.TimerPhase.RUNNING:
 			MainTimer.init_game_time()
+		# On reset, save run (make this an optional feature later?)
+		elif phase == TimerSettings.TimerPhase.NOT_RUNNING:
+			MainTimer.try_save_run(TimerSettings.current_file_path)
 	)
 
 func add_element(element: TimerElement) -> void:
