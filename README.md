@@ -32,7 +32,12 @@ Autosplitters for the following games are shipped with the application by defaul
  5. You can ruin the main scene to test out the timer. Once you're finished, open theme_dumper.tscn (in the ThemeDumper folder)
  6. Run the scene and select a location to save the .zip file in, and a .zip containing the new theme will be placed there. It can be loaded as normal from there.
 
-
+## Planned (maybe) features
+- Add working global hotkeys for Wayland
+- Make the quick load file search recursive, so you can organize the folder without causing issues.
+- Add support for WebAssembly autosplitting runtime (GDScript autosplitters will still be an option)
+- Functional theme editor
+- More settings
 
 ## Building
  1. Install cargo, godot 4.4 (whatever the latest beta is, this will be kept up to date), and install any needed export templates in the godot editor.
