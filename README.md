@@ -9,7 +9,6 @@
  - Customizable layout using godot's resource system - see Themes for more info (You can even write a shader for your timer background!!!!!)
  - Full autosplitter support using GDScript
  
-**WIP: NO RELEASE BUILDS YET**  
 *this project is primarily for my own use and has been only tested on my system (fedora cinnamon spin). it probably doesn't work on other platforms, but hey, you can try it and see what happens.*
 
 ## Usage
