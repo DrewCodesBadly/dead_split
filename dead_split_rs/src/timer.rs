@@ -359,7 +359,9 @@ impl DeadSplitTimer {
             // should work like 99% of the time, the results aren't a major concern but if it fails it just fails anyway
             let pid = p.pid();
             self.attached_process =
+                // Uncomment the top line for linux builds, bottom for windows. Jank but it works.
                 ProcessHandle::try_from(read_process_memory::Pid::from(pid.as_u32() as i32))
+                // ProcessHandle::try_from(read_process_memory::Pid::from(pid.as_u32()))
                     .ok()
                     .map(|h| ProcessData {
                         handle: h,
