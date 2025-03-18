@@ -11,6 +11,7 @@ extends ScrollContainer
 @export var window_x_num: SpinBox
 @export var window_y_num: SpinBox
 @export var decimals_shown: SpinBox
+@export var split_min_size: SpinBox
 
 func _on_visibility_changed() -> void:
 	if visible:
@@ -25,6 +26,7 @@ func _on_visibility_changed() -> void:
 		upcoming_splits_num.value = TimerSettings.shown_upcoming_splits
 		shown_splits_num.value = TimerSettings.shown_splits
 		decimals_shown.value = TimerSettings.time_rounding
+		split_min_size.value = TimerSettings.split_time_min_size
 
 func _on_title_check_box_toggled(toggled_on: bool) -> void:
 	TimerSettings.show_title = toggled_on
@@ -60,3 +62,6 @@ func _on_win_size_y_value_changed(value: float) -> void:
 
 func _on_decimal_prec_value_changed(value: float) -> void:
 	TimerSettings.time_rounding = floori(value)
+
+func _on_split_min_size_value_changed(value: float) -> void:
+	TimerSettings.split_time_min_size = floori(value)

@@ -36,7 +36,7 @@ var timer_theme_path: String = ""
 var settings_profile_path: String = ""
 
 var window_size: Vector2i = Vector2i(750, 750)
-var split_separation := 50 #TODO: Add setting for this
+var split_time_min_size := 125 #TODO: Add setting for this
 
 # DO NOT SERIALIZE THIS
 var theme: TimerTheme = null
@@ -136,6 +136,7 @@ func save() -> void:
 	settings.autosplitter_path = autosplitter_path
 	settings.autosplitter_settings_dict = autosplitter_settings_dict
 	settings.window_size = window_size
+	settings.split_time_min_size = split_time_min_size
 	
 	# Finally, we save hotkeys
 	settings.hotkeys_dict = MainTimer.get_hotkeys_dict()
@@ -176,6 +177,7 @@ func try_load() -> void:
 		autosplitter_path = settings.autosplitter_path
 		autosplitter_settings_dict = settings.autosplitter_settings_dict
 		window_size = settings.window_size
+		split_time_min_size = settings.split_time_min_size
 		
 		# Load hotkeys
 		for k in settings.hotkeys_dict:
@@ -224,6 +226,7 @@ func load_profile(path: String) -> void:
 		autosplitter_path = settings.autosplitter_path
 		autosplitter_settings_dict = settings.autosplitter_settings_dict
 		window_size = settings.window_size
+		split_time_min_size = settings.split_time_min_size
 		
 		# Load hotkeys
 		MainTimer.clear_hotkeys()

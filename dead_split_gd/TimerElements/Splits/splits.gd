@@ -142,6 +142,7 @@ func timer_process() -> void:
 	# Change the currently active split and set the previous split to a finished state
 	if MainTimer.current_split_index != current_split:
 		current_split = MainTimer.current_split_index
+		split_focus = clamp(current_split + shown_splits_after_current, 0, seg_count - 1)
 		# Update splits, redraw everything (i'm lazy)
 		update_splits()
 	else:
