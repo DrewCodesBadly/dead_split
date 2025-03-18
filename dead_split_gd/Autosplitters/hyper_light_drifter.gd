@@ -1,12 +1,12 @@
 extends Autosplitter
 
 # Declaring pointer paths as packed arrays
-var room_id := PointerPath.new([0x259B1F10], 0, TYPE_U32, true)
-var is_loading := PointerPath.new([0x259A7E24, 0x0, 0x0, 0x10, 0x0, 0xC, 0x28, 0x370], 0.0, TYPE_F64, true)
-var game_state := PointerPath.new([0x259A7E0C, 0xAC, 0xC, 0xC], 0, TYPE_U32, true)
-var module_toggle := PointerPath.new([0x259B2648, 0xA5C, 0x18, 0x24], 0, TYPE_U32, true)
-var horde_end := PointerPath.new([0x259B2648, 0xA60, 0x18, 0x24], 0, TYPE_U32, true)
-var is_paused := PointerPath.new([0x259AF150, 0x0, 0x144, 0x3C, 0xD8], 0, TYPE_U32, true)
+var room_id: PointerPath
+var is_loading: PointerPath
+var game_state: PointerPath
+var module_toggle: PointerPath
+var horde_end: PointerPath
+var is_paused: PointerPath
 var activated_modules: Array[Callable]
 
 var mre_triggered := false
@@ -14,6 +14,25 @@ var mre_triggered := false
 # Make sure to set process_name and add any desired settings to the `settings` dictionary.
 func setup() -> void:
 	process_name = "HyperLightDrift" # Preferably short, as long as it's identifiable
+	
+	# Check the current platform and adjust pointer paths as needed
+	# In this case, only windows and linux under proton are supported.
+	# This will either use the windows pointer paths or linux pointer paths.
+	if OS.get_name().begins_with("Wi"):
+		room_id = PointerPath.new([0x255B1F10], 0, TYPE_U32, true)
+		is_loading = PointerPath.new([0x255A7E24, 0x0, 0x0, 0x10, 0x0, 0xC, 0x28, 0x370], 0.0, TYPE_F64, true)
+		game_state = PointerPath.new([0x255A7E0C, 0xAC, 0xC, 0xC], 0, TYPE_U32, true)
+		module_toggle = PointerPath.new([0x255B2648, 0xA5C, 0x18, 0x24], 0, TYPE_U32, true)
+		horde_end = PointerPath.new([0x255B2648, 0xA60, 0x18, 0x24], 0, TYPE_U32, true)
+		is_paused = PointerPath.new([0x255AF150, 0x0, 0x144, 0x3C, 0xD8], 0, TYPE_U32, true)
+	# Assume linux. Other platforms are not supported.
+	else:
+		room_id = PointerPath.new([0x259B1F10], 0, TYPE_U32, true)
+		is_loading = PointerPath.new([0x259A7E24, 0x0, 0x0, 0x10, 0x0, 0xC, 0x28, 0x370], 0.0, TYPE_F64, true)
+		game_state = PointerPath.new([0x259A7E0C, 0xAC, 0xC, 0xC], 0, TYPE_U32, true)
+		module_toggle = PointerPath.new([0x259B2648, 0xA5C, 0x18, 0x24], 0, TYPE_U32, true)
+		horde_end = PointerPath.new([0x259B2648, 0xA60, 0x18, 0x24], 0, TYPE_U32, true)
+		is_paused = PointerPath.new([0x259AF150, 0x0, 0x144, 0x3C, 0xD8], 0, TYPE_U32, true)
 	
 	# Adding settings
 	settings["ng_start"] = true
