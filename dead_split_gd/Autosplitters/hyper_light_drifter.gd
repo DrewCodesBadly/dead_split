@@ -43,7 +43,11 @@ func setup() -> void:
 	settings["intro"] = true
 	settings["mre"] = false
 	settings["modules"] = true
-	settings["warps"] = true
+	settings["town_warp"] = true
+	settings["north_warp"] = true
+	settings["south_warp"] = true
+	settings["east_warp"] = true
+	settings["west_warp"] = true
 
 # Called after the user's settings are loaded.
 # This is mainly to avoid a billion dictionary checks. Instead, we can use an array of Callables.
@@ -67,8 +71,16 @@ func read_settings() -> void:
 		activated_modules.append(mre)
 	if settings["modules"]:
 		activated_modules.append(modules)
-	if settings["warps"]:
-		activated_modules.append(warps)
+	if settings["town_warp"]:
+		activated_modules.append(town_warp)
+	if settings["north_warp"]:
+		activated_modules.append(north_warp)
+	if settings["south_warp"]:
+		activated_modules.append(south_warp)
+	if settings["east_warp"]:
+		activated_modules.append(east_warp)
+	if settings["west_warp"]:
+		activated_modules.append(west_warp)
 
 func process_update() -> void:
 	# Update all pointer paths (if this is too much of a pain I guess you could put them in a dict)
@@ -125,19 +137,22 @@ func modules() -> void:
 	if module_toggle.last != module_toggle.current and module_toggle.current == 1:
 		start_split()
 
-func warps() -> void:
-	# Town
+func town_warp() -> void:
 	if room_id.current == 61 and (room_id.last < 60 or room_id.last > 80):
 		start_split()
-	# East
-	elif room_id.current == 175 and (room_id.last < 172 or room_id.last > 200):
+
+func east_warp() -> void:
+	if room_id.current == 175 and (room_id.last < 172 or room_id.last > 200):
 		start_split()
-	# North
-	elif room_id.current == 94 and (room_id.last < 93 or room_id.last > 124):
+
+func north_warp() -> void:
+	if room_id.current == 94 and (room_id.last < 93 or room_id.last > 124):
 		start_split()
-	# West
-	elif room_id.current == 219 and (room_id.last < 218 or room_id.last > 253):
+
+func west_warp() -> void:
+	if room_id.current == 219 and (room_id.last < 218 or room_id.last > 253):
 		start_split()
-	# South
-	elif room_id.current == 130 and (room_id.last < 128 or room_id.last > 165):
+
+func south_warp() -> void:
+	if room_id.current == 130 and (room_id.last < 128 or room_id.last > 165):
 		start_split()
