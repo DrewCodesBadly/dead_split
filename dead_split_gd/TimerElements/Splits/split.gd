@@ -10,8 +10,12 @@ var current := false
 
 # This will perform like shit but its so much easier to code and I don't think it matters
 func update() -> void:
-	time_label.text = TimerSettings.round_off_no_decimal(MainTimer.get_segment_comparison(
-		idx, TimerSettings.active_comparison, TimerSettings.rta))
+	# Set the copmarison time based on whether this split has finished or not
+	if MainTimer.current_split_index <= idx:
+		time_label.text = TimerSettings.round_off_no_decimal(
+			MainTimer.get_segment_comparison(idx, TimerSettings.active_comparison, TimerSettings.rta))
+	else:
+		time_label.text = TimerSettings.round_off_no_decimal(MainTimer.get_segment_time(idx, TimerSettings.rta))
 	
 	var comp := MainTimer.get_segment_comparison(idx, TimerSettings.active_comparison, TimerSettings.rta)
 	if MainTimer.timer_phase != TimerSettings.TimerPhase.NOT_RUNNING and \

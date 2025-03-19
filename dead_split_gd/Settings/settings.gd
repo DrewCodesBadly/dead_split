@@ -38,6 +38,8 @@ func _on_close_requested() -> void:
 
 func _on_submenus_item_clicked(index: int, _at_position: Vector2, _mouse_button_index: int) -> void:
 	if index == quit_index:
+		push_error("Quitting the program.")
+		await get_tree().physics_frame
 		get_tree().quit(0)
 	else:
 		# Show menu at that index

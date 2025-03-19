@@ -10,6 +10,9 @@ var split_focus := 0
 var seg_count: int
 var splits_array: Array[SplitData] = []
 
+func _ready() -> void:
+	MainTimer.comparison_changed.connect(func(_comp: String): update_splits())
+
 func run_updated() -> void:
 	# Regenerate timer comparisons
 	MainTimer.regenerate_comparisons()

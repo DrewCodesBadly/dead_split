@@ -84,7 +84,9 @@ func add_element(element: TimerElement) -> void:
 func comp_changed(comp: String) -> void:
 	notification_popup.set_text(comp)
 	notification_popup.flash()
-	MainTimer.run_changed.emit() # lazy and unnecessarily slow but no one will notice :3
+	#MainTimer.run_changed.emit() # lazy and unnecessarily slow but no one will notice :3
+	# Update: This broke things. Not very :3 unfortunately :(
+	# Now it just calls update_splits in the splits module.
 
 func reload_theme() -> void:
 	TimerSettings.reload_theme()
