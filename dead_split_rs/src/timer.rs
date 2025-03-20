@@ -1,4 +1,3 @@
-use core::f64;
 use std::{
     ffi::OsStr,
     fs::{self, File},
@@ -336,7 +335,7 @@ impl DeadSplitTimer {
     }
 
     #[signal]
-    pub fn hotkey_pressed(&mut self, hotkey_id: i32) {}
+    pub fn hotkey_pressed(&mut self, hotkey_id: i32);
 
     // Autosplitter API
     #[func]
