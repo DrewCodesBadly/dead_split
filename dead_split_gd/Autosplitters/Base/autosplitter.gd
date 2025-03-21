@@ -4,6 +4,8 @@ class_name Autosplitter
 
 var process_name: String = ""
 var settings: Dictionary[String, Variant] = {}
+var was_loading := false
+var pointer_paths: Array[PointerPath] = []
 
 # Use this enum when calling read_pointer_path
 enum {
@@ -26,13 +28,46 @@ func read_settings() -> void:
 # Called internally. Do not override.
 func update() -> void:
 	if MainTimer.has_valid_process():
-		process_update()
+		
+		for path in pointer_paths:
+			path.update()
+		
+		match MainTimer.timer_phase:
+			TimerSettings.TimerPhase.NOT_RUNNING:
+				if start():
+					MainTimer.start_split()
+			TimerSettings.TimerPhase.RUNNING:
+				if split():
+					MainTimer.start_split()
+				if reset():
+					MainTimer.reset()
+				var loading := is_loading()
+				if loading and !was_loading:
+					MainTimer.pause_game_time()
+				elif !loading and was_loading:
+					MainTimer.resume_game_time()
+				was_loading = loading
+			_:
+				pass
 	else:
 		MainTimer.try_attach_process(process_name)
 
-# Called every tick when there is a valid process handle. Override this to provide autosplitter functionality.
-func process_update() -> void:
-	pass
+# These functions are called by update(). They work similarly to ASL's scripts.
+# Returning true in start() starts the timer
+# Returning true in split() makes the timer split
+# Returning true in reset() makes the timer reset
+# is_loading() changing will cause the game time to pause and resume
+func start() -> bool:
+	return false
+
+func split() -> bool:
+	return false
+
+func reset() -> bool:
+	return false
+
+func is_loading() -> bool:
+	return false
 
 func start_split() -> void:
 	MainTimer.start_split()
@@ -42,9 +77,6 @@ func skip_split() -> void:
 
 func undo_split() -> void:
 	MainTimer.undo_split()
-
-func reset() -> void:
-	MainTimer.reset()
 
 func pause_game_time() -> void:
 	MainTimer.pause_game_time()
