@@ -9,7 +9,7 @@
  - Customizable layout using godot's resource system - see Themes for more info (You can even write a shader for your timer background!!!!!)
  - Full autosplitter support using GDScript
  
-*this project is primarily for my own use and has been only tested on my system (fedora cinnamon spin). it probably doesn't work on other platforms, but hey, you can try it and see what happens.*
+*very untested. it may fail spectactularly.*
 
 ## Usage
  The app will open as a borderless window similar to livesplit. Clicking and dragging will move the window.  
@@ -46,10 +46,13 @@ Autosplitters for the following games are shipped with the application by defaul
 ## Writing Autosplitters
 Autosplitters are written as GDScript files, and should extend the class "Autosplitter". You can write these however you want but it may be easier in the Godot editor or in a clone of this repository. The default autosplitters in the project can be found in res://Autosplitters. The Hyper Light Drifter autosplitter is thoroughly commented and should be a good example.  
 The Autosplitter class has a ``process_name`` property which you must set. Then, the autosplitter will automatically attempt to attach to any process containing that name. There is also a ``settings`` variable which is a dictionary that should contain mappings of Strings to any Variant type. However, only float, int, and bool will actually show up in the settings editor.
-The Autosplitter class has 3 methods you are expected to override.
+The Autosplitter class has several methods you can override.
 1. ``setup() -> void`` This method is called when the autosplitter is loaded. This is intended to be used to set the ``process_name`` and ``settings`` variables but you could also do anything else.
 2. ``read_settings() -> void`` This method is called after the timer loads any changes to the settings the user made. You might not need this method, but it can be useful if you want to do something with the settings on startup or to store settings somewhere else to avoid checking from the settings dictionary multiple times every tick.
-3. ``process_update() -> void`` **This is where the autosplitter logic runs.** This method is called 120 times per second, but only if the timer has attached to a valid process.
+3. ``start() -> bool`` This method is called only when the timer is not running. Returning true will cause the timer to start.
+4. ``split() -> bool`` This method is called only when the timer is running. Returning true will cause the timer to split.
+5. ``reset() -> bool`` This method is called only when the timer is running. Returning true will cause the timer to reset.
+6. ``is_loading -> bool`` This method is called only when the timer is running. When the return value changes from false to true, game time is paused. When it changes from true to false, game time is resumed.
 
 <!-- end of the list -->
 
@@ -74,4 +77,5 @@ The Autosplitter class provides the following methods:
 
 <!-- end of the list -->
 
-Additionally, the PointerPath class is provided for use in autosplitters. This should be constructed with ``PointerPath.new(p_path: Array[int], last_val, p_type: int, pointer_size_32: bool)``. ``p_path`` should be the pointer path as a list of offsets, and ``last_val`` should be any default value of the same data type that the pointer should read, specified by the ``data_type`` parameter. This works similarly to ``read_pointer_path`` in Autosplitter. Once constructed, the PointerPath be updated using the ``update() -> void`` method every tick, which will attempt to read data from memory. If it succeeds, the ``current`` property will be set to the data that was read, and the ``last`` property will be set to the previous contents of ``current``. Otherwise, no change will be made. This allows you to compare the value from the last tick with that of the current tick easily using something like ``path.last == 0 && path.current == 1``, and guarantees that there will never be a null value so comparisons can be made safely.
+Additionally, the PointerPath class is provided for use in autosplitters. This should be constructed with ``PointerPath.new(p_path: Array[int], last_val, p_type: int, pointer_size_32: bool)``. ``p_path`` should be the pointer path as a list of offsets, and ``last_val`` should be any default value of the same data type that the pointer should read, specified by the ``data_type`` parameter. This works similarly to ``read_pointer_path`` in Autosplitter. Once constructed, the PointerPath be updated using the ``update() -> void`` method every tick, which will attempt to read data from memory. If it succeeds, the ``current`` property will be set to the data that was read, and the ``last`` property will be set to the previous contents of ``current``. Otherwise, no change will be made. This allows you to compare the value from the last tick with that of the current tick easily using something like ``path.last == 0 && path.current == 1``, and guarantees that there will never be a null value so comparisons can be made safely.  
+**You do not need to manually call ``update()``, as long as you add any created PointerPath objects to the ``pointer_paths`` array in the Autosplitter class.**
